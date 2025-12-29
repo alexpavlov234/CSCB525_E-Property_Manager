@@ -1,6 +1,7 @@
 package com.nbu.dao;
 
 import com.nbu.configuration.SessionFactoryUtil;
+import com.nbu.dto.CompanyDto;
 import com.nbu.entity.Company;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -9,38 +10,47 @@ import java.util.List;
 
 public class CompanyDao {
 
-    public static void createCompany(Company company) {
+    public static void createCompany(CompanyDto companyDto) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            session.persist(company);
+            Company companyEntity = new Company();
+            companyEntity.setName(companyDto.getName());
+            companyEntity.setUic(companyDto.getUic());
+            companyEntity.setVatNumber(companyDto.getVatNumber());
+            companyEntity.setRegisteredAddress(companyDto.getRegisteredAddress());
+            companyEntity.setMailingAddress(companyDto.getMailingAddress());
+
+            session.persist(companyEntity);
             transaction.commit();
         }
     }
 
 
-    public static List<Company> getCompanies() {
+    public static List<CompanyDto> getCompanies() {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            return session.createQuery("SELECT c FROM Company c", Company.class).getResultList();
+            return session.createQuery("SELECT new com.nbu.dto.CompanyDto(c.id, c.name, c.uic, c.vatNumber, c.registeredAddress, c.mailingAddress) FROM Company c", CompanyDto.class).getResultList();
         }
     }
 
-    public static Company getCompany(long id) {
+    public static CompanyDto getCompany(long id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            return session.find(Company.class, id);
+            Company companyEntity = session.find(Company.class, id);
+            return new CompanyDto(companyEntity.getId(), companyEntity.getName(), companyEntity.getUic(), companyEntity.getVatNumber(), companyEntity.getRegisteredAddress(), companyEntity.getMailingAddress());
         }
     }
 
-    public static void updateCompany(long id, Company company) {
+    public static void updateCompany(long id, CompanyDto companyDto) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
 
-            Company company1 = session.find(Company.class, id);
-            company1.setName(company.getName());
-            company1.setUic(company.getUic());
-            company1.setVatNumber(company.getVatNumber());
-            company1.setRegisteredAddress(company.getRegisteredAddress());
-            company1.setMailingAddress(company.getMailingAddress());
-            session.persist(company1);
+            Company companyEntity = session.find(Company.class, id);
+            companyEntity.setName(companyDto.getName());
+            companyEntity.setUic(companyDto.getUic());
+            companyEntity.setVatNumber(companyDto.getVatNumber());
+            companyEntity.setRegisteredAddress(companyDto.getRegisteredAddress());
+            companyEntity.setMailingAddress(companyDto.getMailingAddress());
+
+            session.persist(companyEntity);
             transaction.commit();
         }
     }

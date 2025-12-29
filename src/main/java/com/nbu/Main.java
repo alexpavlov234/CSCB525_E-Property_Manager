@@ -1,6 +1,7 @@
 package com.nbu;
 import com.nbu.configuration.SessionFactoryUtil;
 import com.nbu.dao.CompanyDao;
+import com.nbu.dto.CompanyDto;
 import com.nbu.entity.Company;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -8,7 +9,7 @@ import org.hibernate.SessionFactory;
 public class Main {
     public static void main(String[] args) {
 
-        Company company = new Company();
+        CompanyDto company = new CompanyDto();
 
         CompanyDao.getCompanies().forEach(System.out::println);
         company.setName("Company 2312");
