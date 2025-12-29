@@ -26,6 +26,7 @@ public class Company extends BaseEntity {
     private String mailingAddress;
 
     @OneToMany(mappedBy = "company")
+    @ToString.Exclude
     private Set<Employee> employees;
 
 }
