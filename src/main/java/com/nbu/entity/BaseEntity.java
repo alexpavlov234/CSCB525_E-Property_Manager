@@ -1,4 +1,4 @@
-﻿package com.nbu.entity;
+package com.nbu.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
