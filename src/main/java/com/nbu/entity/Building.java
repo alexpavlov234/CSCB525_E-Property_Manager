@@ -1,9 +1,6 @@
 package com.nbu.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -29,7 +26,7 @@ public class Building extends BaseEntity {
 
     private BigDecimal commonAreas;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Employee manager;
 
     @OneToMany(mappedBy = "building")

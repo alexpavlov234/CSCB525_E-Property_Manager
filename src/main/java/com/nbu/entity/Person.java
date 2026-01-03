@@ -1,9 +1,6 @@
 package com.nbu.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -28,7 +25,7 @@ public class Person extends BaseEntity {
 
     private boolean useElevator;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Apartment apartment;
 
     @OneToMany(mappedBy = "owner")

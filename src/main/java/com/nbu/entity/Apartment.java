@@ -1,9 +1,6 @@
 package com.nbu.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -24,10 +21,10 @@ public class Apartment extends BaseEntity {
 
     private BigDecimal area;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Person owner;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Building building;
 
     @OneToMany(mappedBy = "apartment")

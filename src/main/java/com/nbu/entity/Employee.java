@@ -1,9 +1,6 @@
 package com.nbu.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Set;
@@ -21,7 +18,7 @@ public class Employee extends BaseEntity {
     private String lastName;
     private String ucn;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Company company;
 
     @OneToMany(mappedBy = "manager")

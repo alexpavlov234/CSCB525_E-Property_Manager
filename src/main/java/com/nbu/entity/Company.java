@@ -1,6 +1,7 @@
 package com.nbu.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.*;
@@ -25,8 +26,7 @@ public class Company extends BaseEntity {
 
     private String mailingAddress;
 
-    @OneToMany(mappedBy = "company")
-    @ToString.Exclude
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
     private Set<Employee> employees;
 
 }

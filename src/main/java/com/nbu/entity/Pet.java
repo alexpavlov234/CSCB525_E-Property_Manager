@@ -1,6 +1,7 @@
 package com.nbu.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.*;
@@ -15,6 +16,6 @@ import lombok.*;
 public class Pet extends BaseEntity {
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Apartment apartment;
 }
