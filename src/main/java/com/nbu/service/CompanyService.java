@@ -3,6 +3,8 @@ package com.nbu.service;
 import com.nbu.dao.CompanyDao;
 import com.nbu.dto.CompanyDto;
 
+import java.util.List;
+
 public class CompanyService {
     public void createCompany(CompanyDto companyDto) {
         if(CompanyDao.existsByUic(companyDto.getUic())) {
@@ -29,5 +31,13 @@ public class CompanyService {
 
     public void deleteCompany(long id) {
         CompanyDao.deleteCompany(id);
+    }
+
+    public CompanyDto getCompany(long id) {
+        return CompanyDao.getCompany(id);
+    }
+
+    public List<CompanyDto> getCompanies() {
+        return CompanyDao.getCompanies();
     }
 }

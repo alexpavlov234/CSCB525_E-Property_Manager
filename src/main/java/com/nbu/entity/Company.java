@@ -6,7 +6,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
-import org.apache.logging.log4j.core.config.plugins.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.Length;
 
 import java.util.Set;
@@ -28,6 +28,7 @@ public class Company extends BaseEntity {
     @Length(min = 9, max = 9, message = "UIC must be exactly 9 characters long!")
     private String uic;
 
+    @NotBlank(message = "VAT number cannot be blank!")
     @Pattern(regexp = "^(BG\\d{9}|\\d{10})$", message = "VAT number must be 'BG' + 9 digits or 10 digits")
     private String vatNumber;
 
