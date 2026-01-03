@@ -7,11 +7,11 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
-@Table(name = "person")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("PERSON")
 @ToString(callSuper = true)
 public class Person extends BaseEntity {
 
@@ -21,13 +21,8 @@ public class Person extends BaseEntity {
 
     private String lastName;
 
+    private String ucn;
+
     private LocalDate birthDate;
 
-    private boolean useElevator;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Apartment apartment;
-
-    @OneToMany(mappedBy = "owner")
-    private Set<Apartment> ownedApartments;
 }

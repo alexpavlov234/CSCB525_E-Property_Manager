@@ -9,15 +9,9 @@ import java.util.Set;
 @Table(name = "employee")
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString(callSuper = true)
-public class Employee extends BaseEntity {
-    private String firstName;
-    private String middleName;
-    private String lastName;
-    private String ucn;
-
+@DiscriminatorValue("EMPLOYEE")
+@ToString
+public class Employee extends Person {
     @ManyToOne(fetch = FetchType.LAZY)
     private Company company;
 

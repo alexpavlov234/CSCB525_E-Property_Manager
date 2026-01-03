@@ -18,6 +18,7 @@ public class SessionFactoryUtil {
             configuration.addAnnotatedClass(Employee.class);
             configuration.addAnnotatedClass(Payment.class);
             configuration.addAnnotatedClass(Person.class);
+            configuration.addAnnotatedClass(Resident.class);
             configuration.addAnnotatedClass(Pet.class);
             configuration.addAnnotatedClass(Tax.class);
             ServiceRegistry serviceRegistry

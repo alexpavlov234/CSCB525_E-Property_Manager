@@ -22,13 +22,13 @@ public class Apartment extends BaseEntity {
     private BigDecimal area;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Person owner;
+    private Resident owner;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Building building;
 
     @OneToMany(mappedBy = "apartment")
-    private Set<Person> residents;
+    private Set<Resident> residents;
 
     @OneToMany(mappedBy = "apartment")
     private Set<Pet> pets;
