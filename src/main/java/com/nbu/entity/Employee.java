@@ -1,6 +1,7 @@
 package com.nbu.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.Set;
@@ -13,6 +14,7 @@ import java.util.Set;
 @ToString
 public class Employee extends Person {
     @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull(message = "Company must not be null!")
     private Company company;
 
     @OneToMany(mappedBy = "manager")
