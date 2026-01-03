@@ -43,12 +43,12 @@ public class BuildingDao {
 
     public static List<BuildingDto> getBuildings() {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            CriteriaBuilder cb = session.getCriteriaBuilder();
-            CriteriaQuery<BuildingDto> cr = cb.createQuery(BuildingDto.class);
-            Root<Building> root = cr.from(Building.class);
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<BuildingDto> criteriaQuery = criteriaBuilder.createQuery(BuildingDto.class);
+            Root<Building> root = criteriaQuery.from(Building.class);
 
-            cr.select(
-                    cb.construct(
+            criteriaQuery.select(
+                    criteriaBuilder.construct(
                             BuildingDto.class,
                             root.get("id"),
                             root.get("address"),
@@ -58,7 +58,7 @@ public class BuildingDao {
                             root.get("commonAreas")
                     )
             );
-            Query<BuildingDto> query = session.createQuery(cr);
+            Query<BuildingDto> query = session.createQuery(criteriaQuery);
             return query.getResultList();
         }
     }

@@ -33,12 +33,12 @@ public class CompanyDao {
 
     public static List<CompanyDto> getCompanies() {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            CriteriaBuilder cb = session.getCriteriaBuilder();
-            CriteriaQuery<CompanyDto> cr = cb.createQuery(CompanyDto.class);
-            Root<Company> root = cr.from(Company.class);
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<CompanyDto> criteriaQuery = criteriaBuilder.createQuery(CompanyDto.class);
+            Root<Company> root = criteriaQuery.from(Company.class);
 
-            cr.select(
-                    cb.construct(
+            criteriaQuery.select(
+                    criteriaBuilder.construct(
                             CompanyDto.class,
                             root.get("id"),
                             root.get("name"),
@@ -48,7 +48,7 @@ public class CompanyDao {
                             root.get("mailingAddress")
                     ));
 
-            Query<CompanyDto> query = session.createQuery(cr);
+            Query<CompanyDto> query = session.createQuery(criteriaQuery);
             return query.getResultList();
         }
     }
