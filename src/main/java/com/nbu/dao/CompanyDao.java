@@ -2,6 +2,7 @@ package com.nbu.dao;
 
 import com.nbu.configuration.SessionFactoryUtil;
 import com.nbu.dto.CompanyDto;
+import com.nbu.dto.CompanyPaymentDto;
 import com.nbu.entity.Company;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -118,6 +119,18 @@ public class CompanyDao {
             long count = session.createQuery("SELECT COUNT(c) FROM Company c WHERE c.vatNumber = :vatNumber AND c.id != :id", long.class)
                     .setParameter("vatNumber", vatNumber).setParameter("id", id).getSingleResult();
             return count > 0;
+        }
+    }
+
+    public static List<CompanyPaymentDto> getCompanyPayments(int year, int month) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Query<CompanyPaymentDto> query = session.createQuery(
+                    "SELECT new com.nbu.dto.CompanyPaymentDto(c.id, c.name, SUM(p.amount), YEAR(p.paymentDate), MONTH(p.paymentDate)) " +
+                            " FROM Payment p JOIN FETCH p.employee e JOIN FETCH e.company c" +
+                            " WHERE YEAR(p.paymentDate) = :year AND MONTH(p.paymentDate) = :month" +
+                            " GROUP BY c.id, c.name, YEAR(p.paymentDate), MONTH(p.paymentDate)",
+                    CompanyPaymentDto.class).setParameter("year", year).setParameter("month", month);
+            return query.getResultList();
         }
     }
 

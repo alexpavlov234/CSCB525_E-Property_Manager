@@ -14,5 +14,6 @@ public class CompanyPaymentDto {
     private long companyId;
     private String companyName;
     private BigDecimal totalAmountOfPayments;
-    private LocalDate paymentMonthAndYear;
+    private int paymentYear;
+    private int paymentMonth;
 }

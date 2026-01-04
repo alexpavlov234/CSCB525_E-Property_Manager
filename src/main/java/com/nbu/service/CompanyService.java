@@ -2,6 +2,7 @@ package com.nbu.service;
 
 import com.nbu.dao.CompanyDao;
 import com.nbu.dto.CompanyDto;
+import com.nbu.dto.CompanyPaymentDto;
 
 import java.util.List;
 
@@ -39,5 +40,9 @@ public class CompanyService {
 
     public List<CompanyDto> getAllCompanies() {
         return CompanyDao.getCompanies();
+    }
+
+    public List<CompanyPaymentDto> getCompanyPayments(int year, int month) {
+        return CompanyDao.getCompanyPayments(year, month);
     }
 }
