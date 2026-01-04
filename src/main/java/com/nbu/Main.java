@@ -3,6 +3,7 @@ package com.nbu;
 import com.nbu.configuration.SessionFactoryUtil;
 import com.nbu.dto.*;
 import com.nbu.entity.Employee;
+import com.nbu.entity.Pet;
 import com.nbu.menu.CrudMenuHandler;
 import com.nbu.service.*;
 import org.hibernate.Session;
@@ -57,6 +58,7 @@ public class Main {
                     handleApartmentCRUDMenu();
                     break;
                 case 6:
+                    handlePetCRUDMenu();
                     break;
                 case 7:
                     break;
@@ -160,6 +162,18 @@ public class Main {
                 .handle();
     }
 
+    private static void handlePetCRUDMenu() {
+        PetService petService = new PetService();
+        Scanner scanner = new Scanner(System.in);
+        new CrudMenuHandler.Builder<>("Pet", PetDto.class, scanner)
+                .onCreate(petService::createPet)
+                .onRead(petService::getPet)
+                .onReadAll(petService::getAllPets)
+                .onUpdate(petService::updatePet)
+                .onDelete(petService::deletePet)
+                .build()
+                .handle();
+    }
     public static void main(String[] args) {
         Session session = SessionFactoryUtil.getSessionFactory().openSession();
         session.close();
