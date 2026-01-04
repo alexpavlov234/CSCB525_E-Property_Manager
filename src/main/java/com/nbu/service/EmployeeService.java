@@ -12,8 +12,6 @@ public class EmployeeService {
     public void createEmployee(EmployeeDto employeeDto) {
         if (EmployeeDao.existsByUCN(employeeDto.getUcn())) {
             throw new IllegalArgumentException("Employee with UCN " + employeeDto.getUcn() + " already exists.");
-        } else {
-            EmployeeDao.createEmployee(employeeDto);
         }
 
         EmployeeDao.createEmployee(employeeDto);
