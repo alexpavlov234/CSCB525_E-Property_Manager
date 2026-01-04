@@ -2,20 +2,16 @@ package com.nbu.dto;
 
 import lombok.*;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class EmployeeDto {
-    private long id;
+public class EmployeeBuildingsSummaryDto {
+    private long employeeId;
     private String firstName;
     private String middleName;
     private String lastName;
     private String ucn;
-    private LocalDate birthDate;
-    private long companyId;
+    private int buildingCount;
 }

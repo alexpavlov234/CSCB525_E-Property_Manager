@@ -1,7 +1,8 @@
 package com.nbu.service;
 
 import com.nbu.dao.EmployeeDao;
-import com.nbu.dto.EmployeeBuildingsDto;
+import com.nbu.dto.EmployeeBuildingDto;
+import com.nbu.dto.EmployeeBuildingsSummaryDto;
 import com.nbu.dto.EmployeeCompanyDto;
 import com.nbu.dto.EmployeeDto;
 
@@ -26,8 +27,12 @@ public class EmployeeService {
         return EmployeeDao.getEmployees();
     }
 
-    public EmployeeBuildingsDto getEmployeeBuildingsDto(long employeeId) {
-        return EmployeeDao.getEmployeeBuildingsDto(employeeId);
+    public EmployeeBuildingsSummaryDto getEmployeeBuildingsSummaryDto(long employeeId) {
+        return EmployeeDao.getEmployeeBuildingsSummaryDto(employeeId);
+    }
+
+    public List<EmployeeBuildingDto> getEmployeeBuildings(long employeeId) {
+        return EmployeeDao.getEmployeeBuildings(employeeId);
     }
 
     public List<EmployeeCompanyDto> getEmployeeCompanies() {
@@ -38,7 +43,7 @@ public class EmployeeService {
         return EmployeeDao.getEmployeeCompany(employeeId);
     }
 
-    public void updateEmployee(Long id, EmployeeDto employeeDto) {
+    public void updateEmployee(long id, EmployeeDto employeeDto) {
         if (EmployeeDao.existsByUCNExcludingId(employeeDto.getUcn(), id)) {
             throw new IllegalArgumentException("Employee with UCN " + employeeDto.getUcn() + " already exists.");
         }

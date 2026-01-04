@@ -2,18 +2,19 @@ package com.nbu.dto;
 
 import lombok.*;
 
-import java.util.Set;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class EmployeeBuildingsDto {
-    private Long employeeId;
+public class EmployeeBuildingDto {
+    private long employeeId;
     private String firstName;
     private String middleName;
     private String lastName;
     private String ucn;
-    private Set<BuildingDto> buildings;
+
+    private long buildingId;
+    private String buildingAddress;
+    private int numberOfFloors;
 }

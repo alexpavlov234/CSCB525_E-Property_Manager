@@ -1,8 +1,8 @@
 package com.nbu.dao;
 
 import com.nbu.configuration.SessionFactoryUtil;
-import com.nbu.dto.BuildingDto;
-import com.nbu.dto.EmployeeBuildingsDto;
+import com.nbu.dto.EmployeeBuildingDto;
+import com.nbu.dto.EmployeeBuildingsSummaryDto;
 import com.nbu.dto.EmployeeCompanyDto;
 import com.nbu.dto.EmployeeDto;
 import com.nbu.entity.Building;
@@ -15,8 +15,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class EmployeeDao {
     public static void createEmployee(EmployeeDto employeeDto) {
@@ -123,7 +123,7 @@ public class EmployeeDao {
         }
     }
 
-    public static void updateEmployee(Long id, EmployeeDto employeeDto) {
+    public static void updateEmployee(long id, EmployeeDto employeeDto) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Employee employeeEntity = session.find(Employee.class, id);
@@ -149,7 +149,7 @@ public class EmployeeDao {
         }
     }
 
-    public static EmployeeBuildingsDto getEmployeeBuildingsDto(long employeeId) {
+    public static EmployeeBuildingsSummaryDto getEmployeeBuildingsSummaryDto(long employeeId) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Employee employee = session.createQuery(
                             "SELECT e FROM Employee e LEFT JOIN FETCH e.buildings WHERE e.id = :id",
@@ -157,27 +157,28 @@ public class EmployeeDao {
                     .setParameter("id", employeeId)
                     .getSingleResult();
 
-            Set<BuildingDto> buildingDtos = employee.getBuildings().stream()
-                    .map(building -> new BuildingDto(
-                            building.getId(),
-                            building.getAddress(),
-                            building.getNumberOfFloors(),
-                            building.getNumberOfApartments(),
-                            building.getBuiltUpArea(),
-                            building.getCommonAreas()
-                    ))
-                    .collect(java.util.stream.Collectors.toSet());
+            int buildingsCount = (employee.getBuildings() != null ? employee.getBuildings().size() : 0);
 
-            return new EmployeeBuildingsDto(
+            return new EmployeeBuildingsSummaryDto(
                     employee.getId(),
                     employee.getFirstName(),
                     employee.getMiddleName(),
                     employee.getLastName(),
                     employee.getUcn(),
-                    buildingDtos
+                    buildingsCount
             );
         }
     }
+
+   public static List<EmployeeBuildingDto> getEmployeeBuildings(long employeeId) {
+       try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+           Query<EmployeeBuildingDto> query = session.createQuery(
+                   "SELECT new com.nbu.dto.EmployeeBuildingDto(e.id, e.firstName, e.middleName, e.lastName, e.ucn, b.id, b.address, b.numberOfFloors) " +
+                   "FROM Employee e JOIN e.buildings b WHERE e.id = :employeeId", EmployeeBuildingDto.class);
+           query.setParameter("employeeId", employeeId);
+           return query.getResultList();
+       }
+   }
 
     public static void assignBuildingToEmployee(long employeeId, long buildingId) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
@@ -193,16 +194,16 @@ public class EmployeeDao {
 
     public static boolean existsByUCN(String ucn) {
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            Long count = session.createQuery("SELECT COUNT(e) FROM Employee e WHERE e.ucn = :ucn", Long.class)
+            long count = session.createQuery("SELECT COUNT(e) FROM Employee e WHERE e.ucn = :ucn", long.class)
                     .setParameter("ucn", ucn)
                     .getSingleResult();
             return count > 0;
         }
     }
 
-    public static boolean existsByUCNExcludingId(String ucn, Long id) {
+    public static boolean existsByUCNExcludingId(String ucn, long id) {
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            Long count = session.createQuery("SELECT COUNT(e) FROM Employee e WHERE e.ucn = :ucn AND e.id != :id", Long.class)
+            long count = session.createQuery("SELECT COUNT(e) FROM Employee e WHERE e.ucn = :ucn AND e.id != :id", long.class)
                     .setParameter("ucn", ucn)
                     .setParameter("id", id)
                     .getSingleResult();
