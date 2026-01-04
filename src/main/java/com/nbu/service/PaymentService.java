@@ -1,4 +1,4 @@
-﻿package com.nbu.service;
+package com.nbu.service;
 import com.nbu.dao.PaymentDao;
 import com.nbu.dao.TaxDao;
 import com.nbu.dto.PaymentDto;

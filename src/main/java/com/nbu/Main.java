@@ -2,13 +2,12 @@ package com.nbu;
 
 import com.nbu.configuration.SessionFactoryUtil;
 import com.nbu.dto.*;
-import com.nbu.entity.Employee;
-import com.nbu.entity.Pet;
 import com.nbu.menu.CrudMenuHandler;
 import com.nbu.service.*;
 import org.hibernate.Session;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -67,6 +66,7 @@ public class Main {
                     handlePaymentCRUDMenu();
                     break;
                 case 9:
+                    handleReportsMenu();
                     break;
                 case 0:
                     System.out.println("Exiting the application.");
@@ -205,6 +205,331 @@ public class Main {
                 .build()
                 .handle();
     }
+
+    private static void printReportsMenu() {
+        System.out.println("\n=== Reports Menu ===");
+        System.out.println("1. Filter & Sort: Companies by revenue");
+        System.out.println("2. Filter & Sort: Employees by name");
+        System.out.println("3. Filter & Sort: Employees by building count");
+        System.out.println("4. Filter & Sort: Residents by name");
+        System.out.println("5. Filter & Sort: Residents by age");
+        System.out.println("6. Summary: Buildings per employee");
+        System.out.println("7. Summary: Apartments in building");
+        System.out.println("8. Summary: Residents in building");
+        System.out.println("9. Summary: Taxes by company/building/employee");
+        System.out.println("10. Summary: Payments by company/building/employee");
+        System.out.println("0. Return to main menu");
+    }
+
+    private static void handleReportsMenu() {
+        Scanner sc = new Scanner(System.in);
+        ReportService reportService = new ReportService();
+        int selectedOption = -1;
+
+        while (selectedOption != 0) {
+            printReportsMenu();
+            System.out.print("Select option: ");
+            try {
+                selectedOption = sc.nextInt();
+                sc.nextLine();
+            } catch (java.util.InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                sc.nextLine();
+                continue;
+            }
+
+            switch (selectedOption) {
+                case 1:
+                    handleCompaniesByRevenue(sc, reportService);
+                    break;
+                case 2:
+                    handleEmployeesByName(sc, reportService);
+                    break;
+                case 3:
+                    handleEmployeesByBuildingCount(sc, reportService);
+                    break;
+                case 4:
+                    handleResidentsByName(sc, reportService);
+                    break;
+                case 5:
+                    handleResidentsByAge(sc, reportService);
+                    break;
+                case 6:
+                    handleBuildingsPerEmployee(sc, reportService);
+                    break;
+                case 7:
+                    handleApartmentsInBuilding(sc, reportService);
+                    break;
+                case 8:
+                    handleResidentsInBuilding(sc, reportService);
+                    break;
+                case 9:
+                    handleTaxSummary(sc, reportService);
+                    break;
+                case 10:
+                    handlePaymentSummary(sc, reportService);
+                    break;
+                case 0:
+                    System.out.println("Returning to main menu...");
+                    break;
+                default:
+                    System.out.println("Invalid option. Please try again.");
+            }
+        }
+    }
+
+    private static void handleCompaniesByRevenue(Scanner sc, ReportService reportService) {
+        System.out.print("Enter year: ");
+        int year = sc.nextInt();
+        System.out.print("Enter month (1-12): ");
+        int month = sc.nextInt();
+        sc.nextLine();
+        System.out.print("Sort ascending? (y/n): ");
+        boolean ascending = sc.nextLine().trim().equalsIgnoreCase("y");
+
+        List<CompanyPaymentDto> results = reportService.getCompaniesByRevenue(year, month, ascending);
+        System.out.println("\n=== Companies by Revenue (" + month + "/" + year + ") ===");
+        if (results.isEmpty()) {
+            System.out.println("No data found.");
+        } else {
+            for (CompanyPaymentDto dto : results) {
+                System.out.println("Company: " + dto.getCompanyName() + " | Revenue: " + dto.getTotalAmountOfPayments());
+            }
+        }
+    }
+
+    private static void handleEmployeesByName(Scanner sc, ReportService reportService) {
+        System.out.print("Enter company ID: ");
+        long companyId = sc.nextLong();
+        sc.nextLine();
+        System.out.print("Sort ascending? (y/n): ");
+        boolean ascending = sc.nextLine().trim().equalsIgnoreCase("y");
+
+        List<EmployeeBuildingsSummaryDto> results = reportService.getEmployeesByName(companyId, ascending);
+        System.out.println("\n=== Employees sorted by name ===");
+        if (results.isEmpty()) {
+            System.out.println("No employees found.");
+        } else {
+            for (EmployeeBuildingsSummaryDto dto : results) {
+                System.out.println("Employee: " + dto.getFirstName() + " " + dto.getMiddleName() + " " + dto.getLastName() +
+                        " | UCN: " + dto.getUcn() + " | Buildings: " + dto.getBuildingCount());
+            }
+        }
+    }
+
+    private static void handleEmployeesByBuildingCount(Scanner sc, ReportService reportService) {
+        System.out.print("Enter company ID: ");
+        long companyId = sc.nextLong();
+        sc.nextLine();
+        System.out.print("Sort ascending? (y/n): ");
+        boolean ascending = sc.nextLine().trim().equalsIgnoreCase("y");
+
+        List<EmployeeBuildingsSummaryDto> results = reportService.getEmployeesByBuildingCount(companyId, ascending);
+        System.out.println("\n=== Employees sorted by building count ===");
+        if (results.isEmpty()) {
+            System.out.println("No employees found.");
+        } else {
+            for (EmployeeBuildingsSummaryDto dto : results) {
+                System.out.println("Employee: " + dto.getFirstName() + " " + dto.getLastName() +
+                        " | Buildings: " + dto.getBuildingCount());
+            }
+        }
+    }
+
+    private static void handleResidentsByName(Scanner sc, ReportService reportService) {
+        System.out.print("Enter building ID: ");
+        long buildingId = sc.nextLong();
+        sc.nextLine();
+        System.out.print("Sort ascending? (y/n): ");
+        boolean ascending = sc.nextLine().trim().equalsIgnoreCase("y");
+
+        List<BuildingResidentDto> results = reportService.getResidentsByName(buildingId, ascending);
+        System.out.println("\n=== Residents sorted by name ===");
+        if (results.isEmpty()) {
+            System.out.println("No residents found.");
+        } else {
+            for (BuildingResidentDto dto : results) {
+                System.out.println("Resident: " + dto.getFirstName() + " " + dto.getMiddleName() + " " + dto.getLastName() +
+                        " | Age: " + dto.getAge() + " | Apt: " + dto.getApartmentNumber() + " | Floor: " + dto.getFloor());
+            }
+        }
+    }
+
+    private static void handleResidentsByAge(Scanner sc, ReportService reportService) {
+        System.out.print("Enter building ID: ");
+        long buildingId = sc.nextLong();
+        sc.nextLine();
+        System.out.print("Sort ascending? (y/n): ");
+        boolean ascending = sc.nextLine().trim().equalsIgnoreCase("y");
+
+        List<BuildingResidentDto> results = reportService.getResidentsByAge(buildingId, ascending);
+        System.out.println("\n=== Residents sorted by age ===");
+        if (results.isEmpty()) {
+            System.out.println("No residents found.");
+        } else {
+            for (BuildingResidentDto dto : results) {
+                System.out.println("Resident: " + dto.getFirstName() + " " + dto.getLastName() +
+                        " | Age: " + dto.getAge() + " | Apt: " + dto.getApartmentNumber());
+            }
+        }
+    }
+
+    private static void handleBuildingsPerEmployee(Scanner sc, ReportService reportService) {
+        System.out.print("Enter company ID: ");
+        long companyId = sc.nextLong();
+        sc.nextLine();
+        System.out.print("Show detailed list? (y/n): ");
+        boolean detailed = sc.nextLine().trim().equalsIgnoreCase("y");
+
+        if (detailed) {
+            List<EmployeeBuildingDetailDto> results = reportService.getEmployeeBuildingsDetail(companyId);
+            System.out.println("\n=== Buildings per Employee (Detailed) ===");
+            if (results.isEmpty()) {
+                System.out.println("No data found.");
+            } else {
+                for (EmployeeBuildingDetailDto dto : results) {
+                    System.out.println("Employee: " + dto.getEmployeeFirstName() + " " + dto.getEmployeeLastName() +
+                            " | Building: " + dto.getBuildingAddress() +
+                            " | Floors: " + dto.getNumberOfFloors() + " | Apartments: " + dto.getNumberOfApartments());
+                }
+            }
+        } else {
+            List<EmployeeBuildingsSummaryDto> results = reportService.getEmployeeBuildingsSummary(companyId);
+            System.out.println("\n=== Buildings per Employee (Summary) ===");
+            if (results.isEmpty()) {
+                System.out.println("No data found.");
+            } else {
+                for (EmployeeBuildingsSummaryDto dto : results) {
+                    System.out.println("Employee: " + dto.getFirstName() + " " + dto.getLastName() +
+                            " | Total Buildings: " + dto.getBuildingCount());
+                }
+            }
+        }
+    }
+
+    private static void handleApartmentsInBuilding(Scanner sc, ReportService reportService) {
+        System.out.print("Enter building ID: ");
+        long buildingId = sc.nextLong();
+        sc.nextLine();
+        System.out.print("Show detailed list? (y/n): ");
+        boolean detailed = sc.nextLine().trim().equalsIgnoreCase("y");
+
+        if (detailed) {
+            List<BuildingApartmentDto> results = reportService.getBuildingApartmentsDetail(buildingId);
+            System.out.println("\n=== Apartments in Building (Detailed) ===");
+            if (results.isEmpty()) {
+                System.out.println("No apartments found.");
+            } else {
+                for (BuildingApartmentDto dto : results) {
+                    System.out.println("Apt #" + dto.getApartmentNumber() + " | Floor: " + dto.getFloor() +
+                            " | Area: " + dto.getArea() + " sqm | Owner: " + dto.getOwnerFirstName() + " " + dto.getOwnerLastName());
+                }
+            }
+        } else {
+            int count = reportService.getBuildingApartmentsCount(buildingId);
+            System.out.println("\n=== Apartments in Building (Summary) ===");
+            System.out.println("Total apartments: " + count);
+        }
+    }
+
+    private static void handleResidentsInBuilding(Scanner sc, ReportService reportService) {
+        System.out.print("Enter building ID: ");
+        long buildingId = sc.nextLong();
+        sc.nextLine();
+        System.out.print("Show detailed list? (y/n): ");
+        boolean detailed = sc.nextLine().trim().equalsIgnoreCase("y");
+
+        if (detailed) {
+            List<BuildingResidentDto> results = reportService.getBuildingResidentsDetail(buildingId);
+            System.out.println("\n=== Residents in Building (Detailed) ===");
+            if (results.isEmpty()) {
+                System.out.println("No residents found.");
+            } else {
+                for (BuildingResidentDto dto : results) {
+                    System.out.println("Resident: " + dto.getFirstName() + " " + dto.getMiddleName() + " " + dto.getLastName() +
+                            " | Age: " + dto.getAge() + " | Apt: " + dto.getApartmentNumber() + " | Floor: " + dto.getFloor() +
+                            " | Uses Elevator: " + (dto.isUseElevator() ? "Yes" : "No"));
+                }
+            }
+        } else {
+            int count = reportService.getBuildingResidentsCount(buildingId);
+            System.out.println("\n=== Residents in Building (Summary) ===");
+            System.out.println("Total residents: " + count);
+        }
+    }
+
+    private static void handleTaxSummary(Scanner sc, ReportService reportService) {
+        System.out.println("Tax summary by:");
+        System.out.println("1. Company");
+        System.out.println("2. Building");
+        System.out.println("3. Employee");
+        System.out.print("Select option: ");
+        int option = sc.nextInt();
+        sc.nextLine();
+
+        switch (option) {
+            case 1:
+                List<TaxSummaryDto> companyTaxes = reportService.getTaxSummaryByCompany();
+                System.out.println("\n=== Taxes by Company ===");
+                for (TaxSummaryDto dto : companyTaxes) {
+                    System.out.println("Company: " + dto.getEntityName() + " | Total: " + dto.getTotalTaxAmount() + " | Count: " + dto.getTaxCount());
+                }
+                break;
+            case 2:
+                List<TaxSummaryDto> buildingTaxes = reportService.getTaxSummaryByBuilding();
+                System.out.println("\n=== Taxes by Building ===");
+                for (TaxSummaryDto dto : buildingTaxes) {
+                    System.out.println("Building: " + dto.getEntityName() + " | Total: " + dto.getTotalTaxAmount() + " | Count: " + dto.getTaxCount());
+                }
+                break;
+            case 3:
+                List<TaxSummaryDto> employeeTaxes = reportService.getTaxSummaryByEmployee();
+                System.out.println("\n=== Taxes by Employee ===");
+                for (TaxSummaryDto dto : employeeTaxes) {
+                    System.out.println("Employee: " + dto.getEntityName() + " | Total: " + dto.getTotalTaxAmount() + " | Count: " + dto.getTaxCount());
+                }
+                break;
+            default:
+                System.out.println("Invalid option.");
+        }
+    }
+
+    private static void handlePaymentSummary(Scanner sc, ReportService reportService) {
+        System.out.println("Payment summary by:");
+        System.out.println("1. Company");
+        System.out.println("2. Building");
+        System.out.println("3. Employee");
+        System.out.print("Select option: ");
+        int option = sc.nextInt();
+        sc.nextLine();
+
+        switch (option) {
+            case 1:
+                List<PaymentSummaryDto> companyPayments = reportService.getPaymentSummaryByCompany();
+                System.out.println("\n=== Payments by Company ===");
+                for (PaymentSummaryDto dto : companyPayments) {
+                    System.out.println("Company: " + dto.getEntityName() + " | Total: " + dto.getTotalPaymentAmount() + " | Count: " + dto.getPaymentCount());
+                }
+                break;
+            case 2:
+                List<PaymentSummaryDto> buildingPayments = reportService.getPaymentSummaryByBuilding();
+                System.out.println("\n=== Payments by Building ===");
+                for (PaymentSummaryDto dto : buildingPayments) {
+                    System.out.println("Building: " + dto.getEntityName() + " | Total: " + dto.getTotalPaymentAmount() + " | Count: " + dto.getPaymentCount());
+                }
+                break;
+            case 3:
+                List<PaymentSummaryDto> employeePayments = reportService.getPaymentSummaryByEmployee();
+                System.out.println("\n=== Payments by Employee ===");
+                for (PaymentSummaryDto dto : employeePayments) {
+                    System.out.println("Employee: " + dto.getEntityName() + " | Total: " + dto.getTotalPaymentAmount() + " | Count: " + dto.getPaymentCount());
+                }
+                break;
+            default:
+                System.out.println("Invalid option.");
+        }
+    }
+
     public static void main(String[] args) {
         Session session = SessionFactoryUtil.getSessionFactory().openSession();
         session.close();

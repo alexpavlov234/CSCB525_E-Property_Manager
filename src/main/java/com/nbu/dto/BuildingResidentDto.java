@@ -23,5 +23,6 @@ public class BuildingResidentDto {
     private String middleName;
     private String lastName;
     private LocalDate birthDate;
+    private int age;
     private boolean useElevator;
 }
