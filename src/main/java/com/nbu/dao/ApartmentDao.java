@@ -12,7 +12,6 @@ import jakarta.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ApartmentDao {
@@ -92,6 +91,43 @@ public class ApartmentDao {
                     .setParameter("apartmentId", apartmentId)
                     .getResultList();
 
+        }
+    }
+
+    public static boolean existsByNumberAndBuilding(int number, long buildingId) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            long count = session.createQuery(
+                            "SELECT COUNT(a) FROM Apartment a WHERE a.number = :number AND a.building.id = :buildingId", Long.class)
+                    .setParameter("number", number)
+                    .setParameter("buildingId", buildingId)
+                    .getSingleResult();
+            return count > 0;
+        }
+    }
+
+    public static boolean existsByNumberAndBuildingExcludingId(int number, long buildingId, long id) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            long count = session.createQuery(
+                            "SELECT COUNT(a) FROM Apartment a WHERE a.number = :number AND a.building.id = :buildingId AND a.id != :id", Long.class)
+                    .setParameter("number", number)
+                    .setParameter("buildingId", buildingId)
+                    .setParameter("id", id)
+                    .getSingleResult();
+            return count > 0;
+        }
+    }
+
+    public static boolean ownerExists(long ownerId) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Resident resident = session.find(Resident.class, ownerId);
+            return resident != null;
+        }
+    }
+
+    public static boolean buildingExists(long buildingId) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Building building = session.find(Building.class, buildingId);
+            return building != null;
         }
     }
 }

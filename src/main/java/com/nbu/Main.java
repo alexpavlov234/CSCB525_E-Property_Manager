@@ -1,16 +1,10 @@
 package com.nbu;
 
 import com.nbu.configuration.SessionFactoryUtil;
-import com.nbu.dto.BuildingDto;
-import com.nbu.dto.CompanyDto;
-import com.nbu.dto.EmployeeDto;
-import com.nbu.dto.ResidentDto;
+import com.nbu.dto.*;
 import com.nbu.entity.Employee;
 import com.nbu.menu.CrudMenuHandler;
-import com.nbu.service.BuildingService;
-import com.nbu.service.CompanyService;
-import com.nbu.service.EmployeeService;
-import com.nbu.service.ResidentService;
+import com.nbu.service.*;
 import org.hibernate.Session;
 
 import java.time.LocalDate;
@@ -60,6 +54,7 @@ public class Main {
                     handleResidentCRUDMenu();
                     break;
                 case 5:
+                    handleApartmentCRUDMenu();
                     break;
                 case 6:
                     break;
@@ -147,6 +142,20 @@ public class Main {
                 .onReadAll(residentService::getAllResidents)
                 .onUpdate(residentService::updateResident)
                 .onDelete(residentService::deleteResident)
+                .build()
+                .handle();
+    }
+
+    private static void handleApartmentCRUDMenu() {
+        ApartmentService apartmentService = new ApartmentService();
+        Scanner scanner = new Scanner(System.in);
+
+        new CrudMenuHandler.Builder<>("Apartment", ApartmentDto.class, scanner)
+                .onCreate(apartmentService::createApartment)
+                .onRead(apartmentService::getApartment)
+                .onReadAll(apartmentService::getAllApartments)
+                .onUpdate(apartmentService::updateApartment)
+                .onDelete(apartmentService::deleteApartment)
                 .build()
                 .handle();
     }
