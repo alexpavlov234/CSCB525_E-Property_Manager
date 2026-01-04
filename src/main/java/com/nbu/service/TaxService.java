@@ -19,6 +19,9 @@ public class TaxService {
     private static final int MIN_AGE_FOR_ELEVATOR_TAX = 7;
 
     public void createTax(TaxDto taxDto) {
+        if (!ApartmentDao.apartmentExists(taxDto.getApartmentId())) {
+            throw new IllegalArgumentException("Apartment with id " + taxDto.getApartmentId() + " does not exist.");
+        }
         calculateTax(taxDto);
         TaxDao.createTax(taxDto);
     }
@@ -66,18 +69,6 @@ public class TaxService {
 
         taxDto.setAmount(totalAmount);
 
-        return taxDto;
-    }
-
-    /**
-     * Calculates and creates a new tax record for an apartment.
-     *
-     * @param apartmentId the apartment ID
-     * @return the created TaxDto with calculated amount
-     */
-    public TaxDto calculateAndCreateTax(long apartmentId) {
-        TaxDto taxDto = calculateTax(apartmentId);
-        TaxDao.createTax(taxDto);
         return taxDto;
     }
 

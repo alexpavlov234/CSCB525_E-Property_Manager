@@ -64,6 +64,7 @@ public class Main {
                     handleTaxCRUDMenu();
                     break;
                 case 8:
+                    handlePaymentCRUDMenu();
                     break;
                 case 9:
                     break;
@@ -180,13 +181,27 @@ public class Main {
         TaxService taxService = new TaxService();
         Scanner scanner = new Scanner(System.in);
         new CrudMenuHandler.Builder<>("Tax", TaxDto.class, scanner)
-                .excludeFields("id", "amount")
+                .excludeFields("amount")
                 .withCreateMessage("Note: The tax amount will be automatically calculated based on apartment area, elevator users, and pets.")
                 .onCreate(taxService::createTax)
                 .onRead(taxService::getTax)
                 .onReadAll(taxService::getAllTaxes)
                 .onUpdate(taxService::updateTax)
                 .onDelete(taxService::deleteTax)
+                .build()
+                .handle();
+    }
+
+    private static void handlePaymentCRUDMenu() {
+        PaymentService paymentService = new PaymentService();
+        Scanner scanner = new Scanner(System.in);
+        new CrudMenuHandler.Builder<>("Payment", PaymentDto.class, scanner)
+                .withCreateMessage("Note: The payment amount must match the tax amount exactly.")
+                .onCreate(paymentService::createPayment)
+                .onRead(paymentService::getPayment)
+                .onReadAll(paymentService::getPayments)
+                .onUpdate(paymentService::updatePayment)
+                .onDelete(paymentService::deletePayment)
                 .build()
                 .handle();
     }

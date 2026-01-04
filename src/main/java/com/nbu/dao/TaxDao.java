@@ -11,6 +11,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class TaxDao {
@@ -50,8 +51,8 @@ public class TaxDao {
                     criteriaBuilder.construct(
                             TaxDto.class,
                     root.get("id"),
-                    root.get("type"),
                     root.get("amount"),
+                    root.get("type"),
                     root.get("apartment").get("id")
                     )
             );
@@ -81,6 +82,20 @@ public class TaxDao {
             Tax tax = session.find(Tax.class, taxDto.getId());
             session.remove(tax);
             transaction.commit();
+        }
+    }
+
+    public static boolean taxExists(long taxId) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Tax tax = session.find(Tax.class, taxId);
+            return tax != null;
+        }
+    }
+
+    public static BigDecimal getTaxAmount(long taxId) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Tax tax = session.find(Tax.class, taxId);
+            return tax != null ? tax.getAmount() : null;
         }
     }
 }
