@@ -2,6 +2,7 @@ package com.nbu.dao;
 
 import com.nbu.configuration.SessionFactoryUtil;
 import com.nbu.dto.BuildingDto;
+import com.nbu.dto.BuildingResidentDto;
 import com.nbu.entity.Building;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -85,6 +86,12 @@ public class BuildingDao {
             Building building = session.find(Building.class, id);
             session.remove(building);
             transaction.commit();
+        }
+    }
+
+    public static List<BuildingResidentDto> getBuildingResidents(long buildingId) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            return session.createQuery("SELECT new com.nbu.dto.BuildingResidentDto(b.id, b.address, a.id, a.number, a.floor, r.id, r.firstName, r.middleName, r.lastName, r.birthDate, r.useElevator) FROM Building b JOIN FETCH b.apartments a JOIN FETCH a.residents r WHERE b.id == :buildingId").setParameter("buildingId", buildingId).getResultList();
         }
     }
 
