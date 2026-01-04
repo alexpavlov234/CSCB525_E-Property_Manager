@@ -4,11 +4,13 @@ import com.nbu.configuration.SessionFactoryUtil;
 import com.nbu.dto.BuildingDto;
 import com.nbu.dto.CompanyDto;
 import com.nbu.dto.EmployeeDto;
+import com.nbu.dto.ResidentDto;
 import com.nbu.entity.Employee;
 import com.nbu.menu.CrudMenuHandler;
 import com.nbu.service.BuildingService;
 import com.nbu.service.CompanyService;
 import com.nbu.service.EmployeeService;
+import com.nbu.service.ResidentService;
 import org.hibernate.Session;
 
 import java.time.LocalDate;
@@ -55,6 +57,7 @@ public class Main {
                     handleBuildingCRUDMenu();
                     break;
                 case 4:
+                    handleResidentCRUDMenu();
                     break;
                 case 5:
                     break;
@@ -134,6 +137,20 @@ public class Main {
                 .handle();
     }
 
+    private static void handleResidentCRUDMenu() {
+        ResidentService residentService = new ResidentService();
+        Scanner scanner = new Scanner(System.in);
+
+        new CrudMenuHandler.Builder<>("Resident", ResidentDto.class, scanner)
+                .onCreate(residentService::createResident)
+                .onRead(residentService::getResident)
+                .onReadAll(residentService::getAllResidents)
+                .onUpdate(residentService::updateResident)
+                .onDelete(residentService::deleteResident)
+                .build()
+                .handle();
+    }
+
     public static void main(String[] args) {
         Session session = SessionFactoryUtil.getSessionFactory().openSession();
         session.close();
@@ -157,6 +174,16 @@ public class Main {
         employeeEntity.setCompanyId(companyEntity.getId());
         EmployeeService employeeService = new EmployeeService();
         employeeService.createEmployee(employeeEntity);
+
+        BuildingDto buildingEntity = new BuildingDto();
+        buildingEntity.setAddress("456 Elm St, City, Country");
+        buildingEntity.setNumberOfFloors(10);
+        buildingEntity.setNumberOfApartments(20);
+        buildingEntity.setCommonAreas(334.5);
+        buildingEntity.setBuiltUpArea(1200.0);
+        BuildingService buildingService = new BuildingService();
+        buildingService.createBuilding(buildingEntity);
+
 
         handleMainMenu();
     }
