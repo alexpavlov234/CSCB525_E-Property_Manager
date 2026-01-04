@@ -14,7 +14,7 @@ public class BuildingService {
         return BuildingDao.getBuilding(buildingId);
     }
 
-    public List<BuildingDto> getAllBuilding() {
+    public List<BuildingDto> getAllBuildings() {
         return BuildingDao.getBuildings();
     }
 

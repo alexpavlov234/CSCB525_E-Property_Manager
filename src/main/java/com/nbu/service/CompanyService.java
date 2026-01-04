@@ -8,10 +8,10 @@ import java.util.List;
 public class CompanyService {
     public void createCompany(CompanyDto companyDto) {
         if(CompanyDao.existsByUic(companyDto.getUic())) {
-            throw new RuntimeException("Company with UIC " + companyDto.getUic() + " already exists.");
+            throw new IllegalArgumentException("Company with UIC " + companyDto.getUic() + " already exists.");
         }
         if(CompanyDao.existsByVatNumber(companyDto.getVatNumber())) {
-            throw new RuntimeException("Company with Vat Number " + companyDto.getVatNumber() + " already exists.");
+            throw new IllegalArgumentException("Company with Vat Number " + companyDto.getVatNumber() + " already exists.");
         }
 
         CompanyDao.createCompany(companyDto);
@@ -19,11 +19,11 @@ public class CompanyService {
 
     public void updateCompany(long id, CompanyDto companyDto) {
         if(CompanyDao.existsByUicExcludingId(companyDto.getUic(), id)) {
-            throw new RuntimeException("Company with UIC " + companyDto.getUic() + " already exists.");
+            throw new IllegalArgumentException("Company with UIC " + companyDto.getUic() + " already exists.");
         }
 
         if(CompanyDao.existsByVatNumberExcludingId(companyDto.getVatNumber(), id)) {
-            throw new RuntimeException("Company with VatNumber " + companyDto.getVatNumber() + " already exists.");
+            throw new IllegalArgumentException("Company with VatNumber " + companyDto.getVatNumber() + " already exists.");
         }
 
         CompanyDao.updateCompany(id, companyDto);
@@ -37,7 +37,7 @@ public class CompanyService {
         return CompanyDao.getCompany(id);
     }
 
-    public List<CompanyDto> getCompanies() {
+    public List<CompanyDto> getAllCompanies() {
         return CompanyDao.getCompanies();
     }
 }

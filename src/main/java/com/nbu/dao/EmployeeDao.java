@@ -191,4 +191,23 @@ public class EmployeeDao {
         }
     }
 
+    public static boolean existsByUCN(String ucn) {
+        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Long count = session.createQuery("SELECT COUNT(e) FROM Employee e WHERE e.ucn = :ucn", Long.class)
+                    .setParameter("ucn", ucn)
+                    .getSingleResult();
+            return count > 0;
+        }
+    }
+
+    public static boolean existsByUCNExcludingId(String ucn, Long id) {
+        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Long count = session.createQuery("SELECT COUNT(e) FROM Employee e WHERE e.ucn = :ucn AND e.id != :id", Long.class)
+                    .setParameter("ucn", ucn)
+                    .setParameter("id", id)
+                    .getSingleResult();
+            return count > 0;
+        }
+    }
+
 }
