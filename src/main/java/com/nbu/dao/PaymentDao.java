@@ -35,7 +35,7 @@ public class PaymentDao {
         }
     }
 
-    public static PaymentDto getPayment(Long id) {
+    public static PaymentDto getPayment(long id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<PaymentDto> criteriaQuery = criteriaBuilder.createQuery(PaymentDto.class);
@@ -93,7 +93,7 @@ public class PaymentDao {
         }
     }
 
-    public static void updatePayment(Long id, PaymentDto paymentDto){
+    public static void updatePayment(long id, PaymentDto paymentDto){
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
 
@@ -111,7 +111,7 @@ public class PaymentDao {
         }
     }
 
-    public static void deletePayment(Long id){
+    public static void deletePayment(long id){
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Payment payment = session.find(Payment.class, id);
@@ -120,12 +120,12 @@ public class PaymentDao {
         }
     }
 
-    public static boolean isPaymentForThisMonthMade(Long taxId, LocalDate paymentDate) {
+    public static boolean isPaymentForThisMonthMade(long taxId, LocalDate paymentDate) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            Long count = session.createQuery(
+            long count = session.createQuery(
                     "SELECT COUNT(p) FROM Payment p WHERE p.tax.id = :taxId " +
                             "AND MONTH(p.paymentDate) = :month " +
-                            "AND YEAR(p.paymentDate) = :year", Long.class)
+                            "AND YEAR(p.paymentDate) = :year", long.class)
                     .setParameter("taxId", taxId)
                     .setParameter("month", paymentDate.getMonthValue())
                     .setParameter("year", paymentDate.getYear())

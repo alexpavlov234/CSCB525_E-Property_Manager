@@ -15,12 +15,12 @@ import java.time.LocalDate;
 @Setter
 @ToString
 public class PaymentDto implements Serializable {
-    private  Long id;
-    private  Long taxId;
-    private  Long taxApartmentId;
-    private  Long taxBuildingId;
+    private  long id;
+    private  long taxId;
+    private  long taxApartmentId;
+    private  long taxBuildingId;
     private  BigDecimal amount;
     private  LocalDate paymentDate;
-    private  Long companyId;
-    private  Long employeeId;
+    private  long companyId;
+    private  long employeeId;
 }

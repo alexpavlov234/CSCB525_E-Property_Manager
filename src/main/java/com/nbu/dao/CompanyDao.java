@@ -87,8 +87,8 @@ public class CompanyDao {
 
     public static boolean existsByUic(String uic) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            Long count = session.createQuery(
-                            "SELECT COUNT(c) FROM Company c WHERE c.uic = :uic", Long.class)
+            long count = session.createQuery(
+                            "SELECT COUNT(c) FROM Company c WHERE c.uic = :uic", long.class)
                     .setParameter("uic", uic)
                     .getSingleResult();
             return count > 0;
@@ -97,7 +97,7 @@ public class CompanyDao {
 
     public static boolean existsByUicExcludingId(String uic, long id) {
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            Long count = session.createQuery("SELECT COUNT(c) FROM Company c WHERE c.uic = :uic AND c.id != :id", Long.class)
+            long count = session.createQuery("SELECT COUNT(c) FROM Company c WHERE c.uic = :uic AND c.id != :id", long.class)
                     .setParameter("uic", uic).setParameter("id", id).getSingleResult();
             return count > 0;
         }
@@ -105,8 +105,8 @@ public class CompanyDao {
 
     public static boolean existsByVatNumber(String vatNumber) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            Long count = session.createQuery(
-                            "SELECT COUNT(c) FROM Company c WHERE c.vatNumber = :vatNumber", Long.class)
+            long count = session.createQuery(
+                            "SELECT COUNT(c) FROM Company c WHERE c.vatNumber = :vatNumber", long.class)
                     .setParameter("vatNumber", vatNumber)
                     .getSingleResult();
             return count > 0;
@@ -115,7 +115,7 @@ public class CompanyDao {
 
     public static boolean existsByVatNumberExcludingId(String vatNumber, long id) {
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            Long count = session.createQuery("SELECT COUNT(c) FROM Company c WHERE c.vatNumber = :vatNumber AND c.id != :id", Long.class)
+            long count = session.createQuery("SELECT COUNT(c) FROM Company c WHERE c.vatNumber = :vatNumber AND c.id != :id", long.class)
                     .setParameter("vatNumber", vatNumber).setParameter("id", id).getSingleResult();
             return count > 0;
         }

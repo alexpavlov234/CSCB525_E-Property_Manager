@@ -31,7 +31,7 @@ public class TaxDao {
         }
     }
 
-    public static TaxDto getTax(Long id){
+    public static TaxDto getTax(long id){
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
             Tax tax = session.find(Tax.class, id);
             TaxDto taxDto = new TaxDto();

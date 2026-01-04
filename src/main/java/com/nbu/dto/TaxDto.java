@@ -10,12 +10,12 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @ToString
 public class TaxDto {
-    private Long id;
+    private long id;
 
     private BigDecimal amount;
 
     private String type;
 
-    private Long apartmentId;
+    private long apartmentId;
 
 }
