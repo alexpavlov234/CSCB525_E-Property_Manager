@@ -180,6 +180,15 @@ public class EmployeeDao {
        }
    }
 
+   public static List<EmployeeBuildingDto> getEmployeeBuildings(){
+         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+              Query<EmployeeBuildingDto> query = session.createQuery(
+                     "SELECT new com.nbu.dto.EmployeeBuildingDto(e.id, e.firstName, e.middleName, e.lastName, e.ucn, b.id, b.address, b.numberOfFloors) " +
+                     "FROM Employee e JOIN e.buildings b", EmployeeBuildingDto.class);
+              return query.getResultList();
+         }
+   }
+
     public static void assignBuildingToEmployee(long employeeId, long buildingId) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();

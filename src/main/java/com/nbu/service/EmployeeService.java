@@ -35,6 +35,11 @@ public class EmployeeService {
         return EmployeeDao.getEmployeeBuildings(employeeId);
     }
 
+
+    public List<EmployeeBuildingDto> getEmployeeBuildings() {
+        return EmployeeDao.getEmployeeBuildings();
+    }
+
     public List<EmployeeCompanyDto> getEmployeeCompanies() {
        return EmployeeDao.getEmployeeCompanies();
     }

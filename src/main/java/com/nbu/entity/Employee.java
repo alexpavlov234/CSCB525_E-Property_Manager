@@ -2,7 +2,9 @@ package com.nbu.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Set;
 
@@ -19,4 +21,7 @@ public class Employee extends Person {
 
     @OneToMany(mappedBy = "manager")
     private Set<Building> buildings;
+
+    @OneToMany(mappedBy = "employee")
+    private Set<Payment> payments;
 }
