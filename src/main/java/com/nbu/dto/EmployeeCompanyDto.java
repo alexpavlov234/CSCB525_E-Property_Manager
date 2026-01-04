@@ -2,20 +2,18 @@ package com.nbu.dto;
 
 import lombok.*;
 
-import java.time.LocalDate;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
 public class EmployeeCompanyDto {
-    Long id;
-    String firstName;
-    String middleName;
-    String lastName;
-    String ucn;
-    Long companyId;
-    String companyName;
-    String companyUic;
+    private Long id;
+    private String firstName;
+    private String middleName;
+    private String lastName;
+    private String ucn;
+    private Long companyId;
+    private String companyName;
+    private String companyUic;
 }

@@ -11,11 +11,11 @@ import java.time.LocalDate;
 @Setter
 @ToString
 public class EmployeeDto {
-    Long id;
-    String firstName;
-    String middleName;
-    String lastName;
-    String ucn;
-    LocalDate birthDate;
-    Long companyId;
+    private Long id;
+    private String firstName;
+    private String middleName;
+    private String lastName;
+    private String ucn;
+    private LocalDate birthDate;
+    private Long companyId;
 }

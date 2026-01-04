@@ -10,10 +10,10 @@ import java.util.Set;
 @Setter
 @ToString
 public class EmployeeBuildingsDto {
-    Long employeeId;
-    String firstName;
-    String middleName;
-    String lastName;
-    String ucn;
-    Set<BuildingDto> buildings;
+    private Long employeeId;
+    private String firstName;
+    private String middleName;
+    private String lastName;
+    private String ucn;
+    private Set<BuildingDto> buildings;
 }
