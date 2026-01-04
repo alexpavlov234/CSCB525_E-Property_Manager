@@ -6,6 +6,7 @@ import com.nbu.dto.PaymentTaxDto;
 import com.nbu.entity.Employee;
 import com.nbu.entity.Payment;
 import com.nbu.entity.Tax;
+import com.nbu.util.PaymentFileWriter;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
@@ -13,6 +14,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -33,6 +35,23 @@ public class PaymentDao {
             session.persist(paymentEntity);
             transaction.commit();
 
+            // Записване на платената такса в JSON файл
+            PaymentTaxDto paymentTaxDto = new PaymentTaxDto(
+                    paymentEntity.getId(),
+                    taxEntity.getId(),
+                    taxEntity.getApartment().getId(),
+                    taxEntity.getApartment().getBuilding().getId(),
+                    paymentEntity.getAmount(),
+                    paymentEntity.getPaymentDate(),
+                    employee.getCompany().getId(),
+                    employee.getId()
+            );
+
+            try {
+                PaymentFileWriter.saveToJsonFile(paymentTaxDto);
+            } catch (IOException e) {
+                throw new RuntimeException("Грешка при запис на JSON файл за плащането", e);
+            }
         }
     }
     public static PaymentTaxDto getPaymentTax(long id) {
