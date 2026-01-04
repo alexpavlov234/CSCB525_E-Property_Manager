@@ -18,14 +18,39 @@ public class ApartmentDao {
     public static void createApartment(ApartmentDto apartmentDto) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            session.persist(apartmentDto);
+
+            Apartment apartment = new Apartment();
+            apartment.setNumber(apartmentDto.getNumber());
+            apartment.setFloor(apartmentDto.getFloor());
+            apartment.setArea(apartmentDto.getArea());
+
+            Resident owner = session.find(Resident.class, apartmentDto.getOwnerId());
+            apartment.setOwner(owner);
+
+            Building building = session.find(Building.class, apartmentDto.getBuildingId());
+            apartment.setBuilding(building);
+
+            session.persist(apartment);
             transaction.commit();
+
+            apartmentDto.setId(apartment.getId());
         }
     }
 
     public static ApartmentDto getApartment(long id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            return session.find(ApartmentDto.class, id);
+            Apartment apartmentEntity = session.find(Apartment.class, id);
+            if (apartmentEntity == null) {
+                return null;
+            }
+            ApartmentDto apartmentDto = new ApartmentDto();
+            apartmentDto.setId(apartmentEntity.getId());
+            apartmentDto.setNumber(apartmentEntity.getNumber());
+            apartmentDto.setFloor(apartmentEntity.getFloor());
+            apartmentDto.setArea(apartmentEntity.getArea());
+            apartmentDto.setOwnerId(apartmentEntity.getOwner().getId());
+            apartmentDto.setBuildingId(apartmentEntity.getBuilding().getId());
+            return apartmentDto;
         }
     }
 
@@ -44,7 +69,6 @@ public class ApartmentDao {
                     root.get("number"),
                     root.get("floor"),
                     root.get("area"),
-                    root.get("price"),
                     root.get("owner").get("id"),
                     root.get("building").get("id")
             ));
