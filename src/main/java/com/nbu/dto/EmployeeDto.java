@@ -2,7 +2,6 @@ package com.nbu.dto;
 
 import lombok.*;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 
 @AllArgsConstructor

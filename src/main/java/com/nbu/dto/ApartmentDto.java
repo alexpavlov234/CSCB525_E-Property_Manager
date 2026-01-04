@@ -2,9 +2,6 @@ package com.nbu.dto;
 
 import lombok.*;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
