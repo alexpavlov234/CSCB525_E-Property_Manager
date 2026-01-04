@@ -55,6 +55,7 @@ public class EmployeeService {
     }
 
     public void deleteEmployee(long id) {
+        EmployeeDao.reassignBuildingsFromEmployee(id);
         EmployeeDao.deleteEmployee(id);
     }
 

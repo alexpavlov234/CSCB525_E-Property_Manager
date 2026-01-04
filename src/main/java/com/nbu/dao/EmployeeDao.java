@@ -223,4 +223,67 @@ public class EmployeeDao {
         }
     }
 
+    public static Employee findEmployeeWithLeastBuildings(long companyId) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            List<Employee> results = session.createQuery(
+                            "SELECT e FROM Employee e " +
+                                    "WHERE e.company.id = :companyId " +
+                                    "ORDER BY SIZE(e.buildings) ASC", Employee.class)
+                    .setParameter("companyId", companyId)
+                    .setMaxResults(1)
+                    .getResultList();
+
+            if (results.isEmpty()) {
+                return null;
+            }
+            return results.get(0);
+        }
+    }
+
+    public static void reassignBuildingsFromEmployee(long employeeId) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+
+            Employee employee = session.createQuery(
+                            "SELECT e FROM Employee e LEFT JOIN FETCH e.buildings WHERE e.id = :id", Employee.class)
+                    .setParameter("id", employeeId)
+                    .getSingleResult();
+
+            if (employee.getBuildings() == null || employee.getBuildings().isEmpty()) {
+                transaction.commit();
+                return;
+            }
+
+            long companyId = employee.getCompany().getId();
+
+            List<Employee> otherEmployees = session.createQuery(
+                            "SELECT e FROM Employee e " +
+                                    "LEFT JOIN FETCH e.buildings " +
+                                    "WHERE e.company.id = :companyId AND e.id != :excludeEmployeeId " +
+                                    "ORDER BY SIZE(e.buildings) ASC", Employee.class)
+                    .setParameter("companyId", companyId)
+                    .setParameter("excludeEmployeeId", employeeId)
+                    .getResultList();
+
+            if (otherEmployees.isEmpty()) {
+                for (Building building : employee.getBuildings()) {
+                    building.setManager(null);
+                    session.merge(building);
+                }
+            } else {
+                List<Building> buildingsToReassign = new ArrayList<>(employee.getBuildings());
+                int employeeIndex = 0;
+
+                for (Building building : buildingsToReassign) {
+                    Employee targetEmployee = otherEmployees.get(employeeIndex % otherEmployees.size());
+                    building.setManager(targetEmployee);
+                    session.merge(building);
+                    employeeIndex++;
+                }
+            }
+
+            transaction.commit();
+        }
+    }
+
 }

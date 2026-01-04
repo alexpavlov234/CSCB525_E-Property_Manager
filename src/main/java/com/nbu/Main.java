@@ -235,6 +235,7 @@ public class Main {
         buildingEntity.setNumberOfApartments(20);
         buildingEntity.setCommonAreas(334.5);
         buildingEntity.setBuiltUpArea(1200.0);
+        buildingEntity.setCompanyId(companyEntity.getId());
         BuildingService buildingService = new BuildingService();
         buildingService.createBuilding(buildingEntity);
 

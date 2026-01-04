@@ -19,4 +19,6 @@ public class BuildingDto {
     private double builtUpArea;
 
     private double commonAreas;
+
+    private long companyId;
 }

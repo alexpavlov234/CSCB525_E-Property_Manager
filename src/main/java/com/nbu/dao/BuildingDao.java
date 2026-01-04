@@ -4,6 +4,7 @@ import com.nbu.configuration.SessionFactoryUtil;
 import com.nbu.dto.BuildingDto;
 import com.nbu.dto.BuildingResidentDto;
 import com.nbu.entity.Building;
+import com.nbu.entity.Employee;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
@@ -23,6 +24,12 @@ public class BuildingDao {
             building.setNumberOfApartments(buildingDto.getNumberOfApartments());
             building.setBuiltUpArea(buildingDto.getBuiltUpArea());
             building.setCommonAreas(buildingDto.getCommonAreas());
+
+            if (buildingDto.getCompanyId() != null) {
+                Employee manager = EmployeeDao.findEmployeeWithLeastBuildings(buildingDto.getCompanyId());
+                building.setManager(manager);
+            }
+
             session.persist(building);
             transaction.commit();
 
@@ -97,6 +104,7 @@ public class BuildingDao {
             return session.createQuery("SELECT new com.nbu.dto.BuildingResidentDto(b.id, b.address, a.id, a.number, a.floor, r.id, r.firstName, r.middleName, r.lastName, r.birthDate, r.useElevator) FROM Building b JOIN FETCH b.apartments a JOIN FETCH a.residents r WHERE b.id = :buildingId").setParameter("buildingId", buildingId).getResultList();
         }
     }
+
 
 
 }
