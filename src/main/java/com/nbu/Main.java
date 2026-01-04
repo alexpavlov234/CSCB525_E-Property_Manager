@@ -530,7 +530,7 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         Session session = SessionFactoryUtil.getSessionFactory().openSession();
         session.close();
 

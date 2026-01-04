@@ -35,7 +35,6 @@ public class PaymentDao {
             session.persist(paymentEntity);
             transaction.commit();
 
-            // Записване на платената такса в JSON файл
             PaymentTaxDto paymentTaxDto = new PaymentTaxDto(
                     paymentEntity.getId(),
                     taxEntity.getId(),

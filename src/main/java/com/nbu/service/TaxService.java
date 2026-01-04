@@ -11,8 +11,6 @@ import java.math.RoundingMode;
 import java.util.List;
 
 public class TaxService {
-
-    // Tax rates - can be configured
     private static final BigDecimal RATE_PER_SQUARE_METER = new BigDecimal("0.50");
     private static final BigDecimal RATE_PER_ELEVATOR_USER = new BigDecimal("5.00");
     private static final BigDecimal RATE_PER_PET = new BigDecimal("3.00");
@@ -51,16 +49,12 @@ public class TaxService {
             throw new IllegalArgumentException("Apartment with id " + taxDto.getApartmentId() + " does not exist.");
         }
 
-        // Get apartment area
         double area = ApartmentDao.getApartmentArea(taxDto.getApartmentId());
 
-        // Count residents over 7 years old who use the elevator
         long elevatorUsers = ResidentDao.countElevatorUsersOverAge(taxDto.getApartmentId(), MIN_AGE_FOR_ELEVATOR_TAX);
 
-        // Count pets in the apartment
         long petCount = PetDao.countPetsInApartment(taxDto.getApartmentId());
 
-        // Calculate total tax
         BigDecimal areaTax = RATE_PER_SQUARE_METER.multiply(BigDecimal.valueOf(area));
         BigDecimal elevatorTax = RATE_PER_ELEVATOR_USER.multiply(BigDecimal.valueOf(elevatorUsers));
         BigDecimal petTax = RATE_PER_PET.multiply(BigDecimal.valueOf(petCount));

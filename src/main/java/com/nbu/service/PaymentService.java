@@ -35,7 +35,7 @@ public class PaymentService {
         if (!PaymentDao.employeeExists(paymentDto.getEmployeeId())) {
             throw new IllegalArgumentException("Employee with id " + paymentDto.getEmployeeId() + " does not exist.");
         }
-        // Validate that payment amount matches the tax amount
+
         BigDecimal taxAmount = TaxDao.getTaxAmount(paymentDto.getTaxId());
         if (paymentDto.getAmount() == null || paymentDto.getAmount().compareTo(taxAmount) != 0) {
             throw new IllegalArgumentException("Payment amount must equal the tax amount: " + taxAmount);
