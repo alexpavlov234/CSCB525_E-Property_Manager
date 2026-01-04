@@ -25,6 +25,8 @@ public class BuildingDao {
             building.setCommonAreas(buildingDto.getCommonAreas());
             session.persist(building);
             transaction.commit();
+
+            buildingDto.setId(building.getId());
         }
     }
 
@@ -32,6 +34,7 @@ public class BuildingDao {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Building buildingEntity = session.find(Building.class, id);
             BuildingDto buildingDto = new BuildingDto();
+            buildingDto.setId(buildingEntity.getId());
             buildingDto.setAddress(buildingEntity.getAddress());
             buildingDto.setNumberOfFloors(buildingEntity.getNumberOfFloors());
             buildingDto.setNumberOfApartments(buildingEntity.getNumberOfApartments());
@@ -91,7 +94,7 @@ public class BuildingDao {
 
     public static List<BuildingResidentDto> getBuildingResidents(long buildingId) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            return session.createQuery("SELECT new com.nbu.dto.BuildingResidentDto(b.id, b.address, a.id, a.number, a.floor, r.id, r.firstName, r.middleName, r.lastName, r.birthDate, r.useElevator) FROM Building b JOIN FETCH b.apartments a JOIN FETCH a.residents r WHERE b.id == :buildingId").setParameter("buildingId", buildingId).getResultList();
+            return session.createQuery("SELECT new com.nbu.dto.BuildingResidentDto(b.id, b.address, a.id, a.number, a.floor, r.id, r.firstName, r.middleName, r.lastName, r.birthDate, r.useElevator) FROM Building b JOIN FETCH b.apartments a JOIN FETCH a.residents r WHERE b.id = :buildingId").setParameter("buildingId", buildingId).getResultList();
         }
     }
 

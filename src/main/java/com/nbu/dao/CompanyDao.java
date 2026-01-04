@@ -28,6 +28,8 @@ public class CompanyDao {
 
             session.persist(companyEntity);
             transaction.commit();
+
+            companyDto.setId(companyEntity.getId());
         }
     }
 

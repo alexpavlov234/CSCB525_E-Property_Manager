@@ -33,6 +33,8 @@ public class EmployeeDao {
             employeeEntity.setCompany(companyEntity);
             session.persist(employeeEntity);
             transaction.commit();
+
+            employeeDto.setId(employeeEntity.getId());
         }
     }
 
@@ -42,6 +44,7 @@ public class EmployeeDao {
                     .setParameter("id", id)
                     .getSingleResult();
             EmployeeDto employeeDto = new EmployeeDto();
+            employeeDto.setId(employeeEntity.getId());
             employeeDto.setFirstName(employeeEntity.getFirstName());
             employeeDto.setMiddleName(employeeEntity.getMiddleName());
             employeeDto.setLastName(employeeEntity.getLastName());

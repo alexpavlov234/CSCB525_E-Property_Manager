@@ -1,14 +1,17 @@
 package com.nbu;
 
 import com.nbu.configuration.SessionFactoryUtil;
+import com.nbu.dto.BuildingDto;
 import com.nbu.dto.CompanyDto;
 import com.nbu.dto.EmployeeDto;
 import com.nbu.entity.Employee;
 import com.nbu.menu.CrudMenuHandler;
+import com.nbu.service.BuildingService;
 import com.nbu.service.CompanyService;
 import com.nbu.service.EmployeeService;
 import org.hibernate.Session;
 
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class Main {
@@ -49,6 +52,7 @@ public class Main {
                     handleEmployeeCRUDMenu();
                     break;
                 case 3:
+                    handleBuildingCRUDMenu();
                     break;
                 case 4:
                     break;
@@ -116,9 +120,43 @@ public class Main {
                 .handle();
     }
 
+    private static void handleBuildingCRUDMenu() {
+        BuildingService buildingService = new BuildingService();
+        Scanner scanner = new Scanner(System.in);
+
+        new CrudMenuHandler.Builder<>("Building", BuildingDto.class, scanner)
+                .onCreate(buildingService::createBuilding)
+                .onRead(buildingService::getBuilding)
+                .onReadAll(buildingService::getAllBuildings)
+                .onUpdate(buildingService::updateBuilding)
+                .onDelete(buildingService::deleteBuilding)
+                .build()
+                .handle();
+    }
+
     public static void main(String[] args) {
         Session session = SessionFactoryUtil.getSessionFactory().openSession();
         session.close();
+
+        CompanyDto companyEntity = new CompanyDto();
+        companyEntity.setName("Company 1");
+        companyEntity.setUic("123456789");
+        companyEntity.setVatNumber("BG123456789");
+        companyEntity.setMailingAddress("123 Main St, City, Country");
+        companyEntity.setRegisteredAddress("123 Main St, City, Country");
+
+        CompanyService companyService = new CompanyService();
+        companyService.createCompany(companyEntity);
+
+        EmployeeDto employeeEntity = new EmployeeDto();
+        employeeEntity.setFirstName("Ivan");
+        employeeEntity.setMiddleName("Ivanov");
+        employeeEntity.setLastName("Alexandrov");
+        employeeEntity.setUcn("0444125566");
+        employeeEntity.setBirthDate(LocalDate.of(2004, 4, 12));
+        employeeEntity.setCompanyId(companyEntity.getId());
+        EmployeeService employeeService = new EmployeeService();
+        employeeService.createEmployee(employeeEntity);
 
         handleMainMenu();
     }
