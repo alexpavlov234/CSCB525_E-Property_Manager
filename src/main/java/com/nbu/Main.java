@@ -61,6 +61,7 @@ public class Main {
                     handlePetCRUDMenu();
                     break;
                 case 7:
+                    handleTaxCRUDMenu();
                     break;
                 case 8:
                     break;
@@ -171,6 +172,21 @@ public class Main {
                 .onReadAll(petService::getAllPets)
                 .onUpdate(petService::updatePet)
                 .onDelete(petService::deletePet)
+                .build()
+                .handle();
+    }
+
+    private static void handleTaxCRUDMenu() {
+        TaxService taxService = new TaxService();
+        Scanner scanner = new Scanner(System.in);
+        new CrudMenuHandler.Builder<>("Tax", TaxDto.class, scanner)
+                .excludeFields("id", "amount")
+                .withCreateMessage("Note: The tax amount will be automatically calculated based on apartment area, elevator users, and pets.")
+                .onCreate(taxService::createTax)
+                .onRead(taxService::getTax)
+                .onReadAll(taxService::getAllTaxes)
+                .onUpdate(taxService::updateTax)
+                .onDelete(taxService::deleteTax)
                 .build()
                 .handle();
     }

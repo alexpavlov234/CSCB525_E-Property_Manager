@@ -15,6 +15,7 @@ public class CrudMenuHandler<T> {
     private final Scanner scanner;
     private final Class<T> dtoClass;
     private final Set<String> excludedFields;
+    private final String createMessage;
 
     private final Consumer<T> createService;
     private final Function<Long, T> readService;
@@ -27,6 +28,7 @@ public class CrudMenuHandler<T> {
         this.scanner = builder.scanner;
         this.dtoClass = builder.dtoClass;
         this.excludedFields = builder.excludedFields;
+        this.createMessage = builder.createMessage;
         this.createService = builder.createService;
         this.readService = builder.readService;
         this.readAllService = builder.readAllService;
@@ -80,6 +82,9 @@ public class CrudMenuHandler<T> {
 
     private void handleCreate() {
         try {
+            if (createMessage != null && !createMessage.isEmpty()) {
+                System.out.println(createMessage);
+            }
             T dto = readObject();
             createService.accept(dto);
             System.out.println(entityName + " created successfully.");
@@ -294,6 +299,7 @@ public class CrudMenuHandler<T> {
         private final Scanner scanner;
         private final Class<T> dtoClass;
         private Set<String> excludedFields = new HashSet<>(Collections.singletonList("id"));
+        private String createMessage;
 
         private Consumer<T> createService;
         private Function<Long, T> readService;
@@ -310,6 +316,11 @@ public class CrudMenuHandler<T> {
         public Builder<T> excludeFields(String... fields) {
             this.excludedFields = new HashSet<>(Arrays.asList(fields));
             this.excludedFields.add("id");
+            return this;
+        }
+
+        public Builder<T> withCreateMessage(String message) {
+            this.createMessage = message;
             return this;
         }
 

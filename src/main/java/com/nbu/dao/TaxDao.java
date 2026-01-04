@@ -1,7 +1,6 @@
 package com.nbu.dao;
 
 import com.nbu.configuration.SessionFactoryUtil;
-import com.nbu.dto.EmployeeCompanyDto;
 import com.nbu.dto.TaxDto;
 import com.nbu.entity.Apartment;
 import com.nbu.entity.Tax;
@@ -12,8 +11,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 public class TaxDao {

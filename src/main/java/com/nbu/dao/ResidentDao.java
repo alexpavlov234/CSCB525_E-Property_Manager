@@ -11,6 +11,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class ResidentDao {
@@ -137,6 +138,19 @@ public class ResidentDao {
                     .setParameter("id", id)
                     .getSingleResult();
             return count > 0;
+        }
+    }
+
+    public static long countElevatorUsersOverAge(long apartmentId, int minAge) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            LocalDate cutoffDate = LocalDate.now().minusYears(minAge);
+            Long count = session.createQuery(
+                            "SELECT COUNT(r) FROM Resident r WHERE r.apartment.id = :apartmentId " +
+                                    "AND r.useElevator = true AND r.birthDate <= :cutoffDate", Long.class)
+                    .setParameter("apartmentId", apartmentId)
+                    .setParameter("cutoffDate", cutoffDate)
+                    .getSingleResult();
+            return count != null ? count : 0;
         }
     }
 }

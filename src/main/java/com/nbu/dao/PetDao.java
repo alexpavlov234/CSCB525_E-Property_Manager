@@ -110,5 +110,15 @@ public class PetDao {
             return apartment != null;
         }
     }
+
+    public static long countPetsInApartment(long apartmentId) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Long count = session.createQuery(
+                            "SELECT COUNT(p) FROM Pet p WHERE p.apartment.id = :apartmentId", Long.class)
+                    .setParameter("apartmentId", apartmentId)
+                    .getSingleResult();
+            return count != null ? count : 0;
+        }
+    }
 }
 

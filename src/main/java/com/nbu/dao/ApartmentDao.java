@@ -130,4 +130,18 @@ public class ApartmentDao {
             return building != null;
         }
     }
+
+    public static boolean apartmentExists(long apartmentId) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Apartment apartment = session.find(Apartment.class, apartmentId);
+            return apartment != null;
+        }
+    }
+
+    public static double getApartmentArea(long apartmentId) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Apartment apartment = session.find(Apartment.class, apartmentId);
+            return apartment != null ? apartment.getArea() : 0;
+        }
+    }
 }
