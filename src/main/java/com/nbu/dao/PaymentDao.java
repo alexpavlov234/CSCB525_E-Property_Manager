@@ -2,7 +2,6 @@ package com.nbu.dao;
 
 import com.nbu.configuration.SessionFactoryUtil;
 import com.nbu.dto.PaymentDto;
-import com.nbu.entity.Company;
 import com.nbu.entity.Employee;
 import com.nbu.entity.Payment;
 import com.nbu.entity.Tax;
@@ -13,6 +12,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class PaymentDao {
@@ -35,7 +35,7 @@ public class PaymentDao {
         }
     }
 
-    public static PaymentDto getPaymentById(long id) {
+    public static PaymentDto getPayment(Long id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<PaymentDto> criteriaQuery = criteriaBuilder.createQuery(PaymentDto.class);
@@ -64,7 +64,7 @@ public class PaymentDao {
         }
     }
 
-    public static List<PaymentDto> getAllPayments() {
+    public static List<PaymentDto> getPayments() {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<PaymentDto> criteriaQuery = criteriaBuilder.createQuery(PaymentDto.class);
@@ -93,7 +93,7 @@ public class PaymentDao {
         }
     }
 
-    public static void updatePayment(long id, PaymentDto paymentDto){
+    public static void updatePayment(Long id, PaymentDto paymentDto){
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
 
@@ -111,12 +111,27 @@ public class PaymentDao {
         }
     }
 
-    public static void deletePayment(long id){
+    public static void deletePayment(Long id){
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Payment payment = session.find(Payment.class, id);
             session.remove(payment);
             transaction.commit();
+        }
+    }
+
+    public static boolean isPaymentForThisMonthMade(Long taxId, LocalDate paymentDate) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Long count = session.createQuery(
+                    "SELECT COUNT(p) FROM Payment p WHERE p.tax.id = :taxId " +
+                            "AND MONTH(p.paymentDate) = :month " +
+                            "AND YEAR(p.paymentDate) = :year", Long.class)
+                    .setParameter("taxId", taxId)
+                    .setParameter("month", paymentDate.getMonthValue())
+                    .setParameter("year", paymentDate.getYear())
+                    .getSingleResult();
+
+            return count > 0;
         }
     }
 }
