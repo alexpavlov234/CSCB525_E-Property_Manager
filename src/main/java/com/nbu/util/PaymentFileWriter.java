@@ -3,7 +3,7 @@ package com.nbu.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.nbu.dto.PaymentTaxDto;
+import com.nbu.dto.view.PaymentTaxDto;
 
 import java.io.File;
 import java.io.IOException;
