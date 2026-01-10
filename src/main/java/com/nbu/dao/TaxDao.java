@@ -1,7 +1,7 @@
 package com.nbu.dao;
 
 import com.nbu.configuration.SessionFactoryUtil;
-import com.nbu.dto.TaxDto;
+import com.nbu.dto.request.TaxDto;
 import com.nbu.entity.Apartment;
 import com.nbu.entity.Tax;
 import com.nbu.entity.TaxType;
@@ -18,7 +18,7 @@ import java.util.List;
 public class TaxDao {
 
     public static void createTax(TaxDto taxDto) {
-        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Apartment apartment = session.find(Apartment.class, taxDto.getApartmentId());
 
@@ -33,16 +33,16 @@ public class TaxDao {
         }
     }
 
-    public static TaxDto getTax(long id){
-        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
-           return session.createQuery("SELECT new com.nbu.dto.TaxDto(t.id, t.amount, t.type.id, t.apartment.id) FROM Tax t WHERE t.id = :id", TaxDto.class)
+    public static TaxDto getTax(long id) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            return session.createQuery("SELECT new com.nbu.dto.TaxDto(t.id, t.amount, t.type.id, t.apartment.id) FROM Tax t WHERE t.id = :id", TaxDto.class)
                     .setParameter("id", id)
                     .getSingleResult();
         }
     }
 
-    public static List<TaxDto> getTaxes(){
-        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
+    public static List<TaxDto> getTaxes() {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<TaxDto> criteriaQuery = criteriaBuilder.createQuery(TaxDto.class);
             Root<Tax> root = criteriaQuery.from(Tax.class);
@@ -50,10 +50,10 @@ public class TaxDao {
             criteriaQuery.select(
                     criteriaBuilder.construct(
                             TaxDto.class,
-                    root.get("id"),
-                    root.get("amount"),
-                    root.get("type").get("id"),
-                    root.get("apartment").get("id")
+                            root.get("id"),
+                            root.get("amount"),
+                            root.get("type").get("id"),
+                            root.get("apartment").get("id")
                     )
             );
 
@@ -63,8 +63,8 @@ public class TaxDao {
         }
     }
 
-    public static void updateTax(TaxDto taxDto){
-        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
+    public static void updateTax(TaxDto taxDto) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Tax tax = session.find(Tax.class, taxDto.getId());
             TaxType taxType = session.find(TaxType.class, taxDto.getTaxTypeId());
@@ -77,8 +77,8 @@ public class TaxDao {
         }
     }
 
-    public static void deleteTax(TaxDto taxDto){
-        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
+    public static void deleteTax(TaxDto taxDto) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Tax tax = session.find(Tax.class, taxDto.getId());
             session.remove(tax);

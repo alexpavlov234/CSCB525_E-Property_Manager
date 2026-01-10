@@ -1,12 +1,15 @@
 package com.nbu.service;
 
 import com.nbu.dao.ResidentDao;
-import com.nbu.dto.ResidentDto;
+import com.nbu.dto.request.ResidentDto;
+import com.nbu.util.ValidatorUtil;
 
 import java.util.List;
 
 public class ResidentService {
     public void createResident(ResidentDto residentDto) {
+        ValidatorUtil.validate(residentDto);
+
         if (ResidentDao.existsByUCN(residentDto.getUcn())) {
             throw new IllegalArgumentException("Resident with UCN " + residentDto.getUcn() + " already exists.");
         }
@@ -27,6 +30,8 @@ public class ResidentService {
     }
 
     public void updateResident(long id, ResidentDto residentDto) {
+
+        ValidatorUtil.validate(residentDto);
         if (ResidentDao.existsByUCNExcludingId(residentDto.getUcn(), id)) {
             throw new IllegalArgumentException("Resident with UCN " + residentDto.getUcn() + " already exists.");
         }

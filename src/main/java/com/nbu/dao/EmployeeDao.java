@@ -1,10 +1,10 @@
 package com.nbu.dao;
 
 import com.nbu.configuration.SessionFactoryUtil;
-import com.nbu.dto.EmployeeBuildingDto;
-import com.nbu.dto.EmployeeBuildingsSummaryDto;
-import com.nbu.dto.EmployeeCompanyDto;
-import com.nbu.dto.EmployeeDto;
+import com.nbu.dto.request.EmployeeDto;
+import com.nbu.dto.view.EmployeeBuildingDto;
+import com.nbu.dto.view.EmployeeBuildingsSummaryDto;
+import com.nbu.dto.view.EmployeeCompanyDto;
 import com.nbu.entity.Building;
 import com.nbu.entity.Company;
 import com.nbu.entity.Employee;
@@ -173,24 +173,24 @@ public class EmployeeDao {
         }
     }
 
-   public static List<EmployeeBuildingDto> getEmployeeBuildings(long employeeId) {
-       try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-           Query<EmployeeBuildingDto> query = session.createQuery(
-                   "SELECT new com.nbu.dto.EmployeeBuildingDto(e.id, e.firstName, e.middleName, e.lastName, e.ucn, b.id, b.address, b.numberOfFloors) " +
-                   "FROM Employee e JOIN e.buildings b WHERE e.id = :employeeId", EmployeeBuildingDto.class);
-           query.setParameter("employeeId", employeeId);
-           return query.getResultList();
-       }
-   }
+    public static List<EmployeeBuildingDto> getEmployeeBuildings(long employeeId) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Query<EmployeeBuildingDto> query = session.createQuery(
+                    "SELECT new com.nbu.dto.EmployeeBuildingDto(e.id, e.firstName, e.middleName, e.lastName, e.ucn, b.id, b.address, b.numberOfFloors) " +
+                            "FROM Employee e JOIN e.buildings b WHERE e.id = :employeeId", EmployeeBuildingDto.class);
+            query.setParameter("employeeId", employeeId);
+            return query.getResultList();
+        }
+    }
 
-   public static List<EmployeeBuildingDto> getEmployeeBuildings(){
-         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-              Query<EmployeeBuildingDto> query = session.createQuery(
-                     "SELECT new com.nbu.dto.EmployeeBuildingDto(e.id, e.firstName, e.middleName, e.lastName, e.ucn, b.id, b.address, b.numberOfFloors) " +
-                     "FROM Employee e JOIN e.buildings b", EmployeeBuildingDto.class);
-              return query.getResultList();
-         }
-   }
+    public static List<EmployeeBuildingDto> getEmployeeBuildings() {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Query<EmployeeBuildingDto> query = session.createQuery(
+                    "SELECT new com.nbu.dto.EmployeeBuildingDto(e.id, e.firstName, e.middleName, e.lastName, e.ucn, b.id, b.address, b.numberOfFloors) " +
+                            "FROM Employee e JOIN e.buildings b", EmployeeBuildingDto.class);
+            return query.getResultList();
+        }
+    }
 
     public static void assignBuildingToEmployee(long employeeId, long buildingId) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
@@ -205,7 +205,7 @@ public class EmployeeDao {
     }
 
     public static boolean existsByUCN(String ucn) {
-        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             long count = session.createQuery("SELECT COUNT(e) FROM Employee e WHERE e.ucn = :ucn", long.class)
                     .setParameter("ucn", ucn)
                     .getSingleResult();
@@ -214,7 +214,7 @@ public class EmployeeDao {
     }
 
     public static boolean existsByUCNExcludingId(String ucn, long id) {
-        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             long count = session.createQuery("SELECT COUNT(e) FROM Employee e WHERE e.ucn = :ucn AND e.id != :id", long.class)
                     .setParameter("ucn", ucn)
                     .setParameter("id", id)

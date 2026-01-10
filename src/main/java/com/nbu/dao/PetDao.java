@@ -1,7 +1,7 @@
 package com.nbu.dao;
 
 import com.nbu.configuration.SessionFactoryUtil;
-import com.nbu.dto.PetDto;
+import com.nbu.dto.request.PetDto;
 import com.nbu.entity.Apartment;
 import com.nbu.entity.Pet;
 import jakarta.persistence.criteria.CriteriaBuilder;

@@ -1,7 +1,7 @@
 package com.nbu.dao;
 
 import com.nbu.configuration.SessionFactoryUtil;
-import com.nbu.dto.ResidentDto;
+import com.nbu.dto.request.ResidentDto;
 import com.nbu.entity.Apartment;
 import com.nbu.entity.Resident;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -39,7 +39,7 @@ public class ResidentDao {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             return session.createQuery(
                             "SELECT new com.nbu.dto.ResidentDto(r.id, r.firstName, r.middleName, r.lastName, r.ucn, r.birthDate, r.useElevator, a.id) " +
-                            "FROM Resident r JOIN FETCH r.apartment a WHERE r.id = :id", ResidentDto.class)
+                                    "FROM Resident r JOIN FETCH r.apartment a WHERE r.id = :id", ResidentDto.class)
                     .setParameter("id", id)
                     .getSingleResult();
         }

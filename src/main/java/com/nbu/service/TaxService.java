@@ -1,10 +1,8 @@
 package com.nbu.service;
 
-import com.nbu.dao.ApartmentDao;
-import com.nbu.dao.PetDao;
-import com.nbu.dao.ResidentDao;
-import com.nbu.dao.TaxDao;
-import com.nbu.dto.TaxDto;
+import com.nbu.dao.*;
+import com.nbu.dto.request.TaxDto;
+import com.nbu.util.ValidatorUtil;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -21,6 +19,7 @@ public class TaxService {
             throw new IllegalArgumentException("Apartment with id " + taxDto.getApartmentId() + " does not exist.");
         }
         calculateTax(taxDto);
+        validateTaxData(taxDto);
         TaxDao.createTax(taxDto);
     }
 
@@ -67,12 +66,10 @@ public class TaxService {
     }
 
     private void validateTaxData(TaxDto taxDto) {
-        if (taxDto.getType() == null || taxDto.getType().isBlank()) {
-            throw new IllegalArgumentException("Tax type cannot be empty.");
-        }
 
-        if (taxDto.getAmount() == null || taxDto.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Tax amount must be greater than zero.");
+        ValidatorUtil.validate(taxDto);
+        if (!TaxTypeDao.taxTypeExists(taxDto.getTaxTypeId())) {
+            throw new IllegalArgumentException("Tax type with id " + taxDto.getTaxTypeId() + " does not exist.");
         }
 
         if (!ApartmentDao.apartmentExists(taxDto.getApartmentId())) {

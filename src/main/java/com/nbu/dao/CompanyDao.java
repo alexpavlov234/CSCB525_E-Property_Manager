@@ -1,8 +1,8 @@
 package com.nbu.dao;
 
 import com.nbu.configuration.SessionFactoryUtil;
-import com.nbu.dto.CompanyDto;
-import com.nbu.dto.CompanyPaymentDto;
+import com.nbu.dto.request.CompanyDto;
+import com.nbu.dto.view.CompanyPaymentDto;
 import com.nbu.entity.Company;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -99,7 +99,7 @@ public class CompanyDao {
     }
 
     public static boolean existsByUicExcludingId(String uic, long id) {
-        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             long count = session.createQuery("SELECT COUNT(c) FROM Company c WHERE c.uic = :uic AND c.id != :id", long.class)
                     .setParameter("uic", uic).setParameter("id", id).getSingleResult();
             return count > 0;
@@ -117,7 +117,7 @@ public class CompanyDao {
     }
 
     public static boolean existsByVatNumberExcludingId(String vatNumber, long id) {
-        try(Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             long count = session.createQuery("SELECT COUNT(c) FROM Company c WHERE c.vatNumber = :vatNumber AND c.id != :id", long.class)
                     .setParameter("vatNumber", vatNumber).setParameter("id", id).getSingleResult();
             return count > 0;

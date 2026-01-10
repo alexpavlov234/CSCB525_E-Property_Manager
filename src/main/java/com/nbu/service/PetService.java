@@ -1,7 +1,8 @@
 package com.nbu.service;
 
 import com.nbu.dao.PetDao;
-import com.nbu.dto.PetDto;
+import com.nbu.dto.request.PetDto;
+import com.nbu.util.ValidatorUtil;
 
 import java.util.List;
 
@@ -34,6 +35,8 @@ public class PetService {
     }
 
     private void validatePetData(PetDto petDto) {
+        ValidatorUtil.validate(petDto);
+
         if (petDto.getName() == null || petDto.getName().isBlank()) {
             throw new IllegalArgumentException("Pet name cannot be empty.");
         }

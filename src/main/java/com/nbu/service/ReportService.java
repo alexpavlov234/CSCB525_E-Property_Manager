@@ -1,7 +1,7 @@
 package com.nbu.service;
 
 import com.nbu.dao.ReportDao;
-import com.nbu.dto.*;
+import com.nbu.dto.view.*;
 
 import java.util.List;
 

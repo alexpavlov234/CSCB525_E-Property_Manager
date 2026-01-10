@@ -1,8 +1,8 @@
 package com.nbu.dao;
 
 import com.nbu.configuration.SessionFactoryUtil;
-import com.nbu.dto.ApartmentDto;
-import com.nbu.dto.ApartmentResidentDto;
+import com.nbu.dto.request.ApartmentDto;
+import com.nbu.dto.view.ApartmentResidentDto;
 import com.nbu.entity.Apartment;
 import com.nbu.entity.Building;
 import com.nbu.entity.Resident;
@@ -166,6 +166,17 @@ public class ApartmentDao {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Apartment apartment = session.find(Apartment.class, apartmentId);
             return apartment != null ? apartment.getArea() : 0;
+        }
+    }
+
+    public static boolean isNumberUniqueInBuilding(int number, long buildingId) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            long count = session.createQuery(
+                            "SELECT COUNT(a) FROM Apartment a WHERE a.number = :number AND a.building.id = :buildingId", Long.class)
+                    .setParameter("number", number)
+                    .setParameter("buildingId", buildingId)
+                    .getSingleResult();
+            return count == 0;
         }
     }
 }

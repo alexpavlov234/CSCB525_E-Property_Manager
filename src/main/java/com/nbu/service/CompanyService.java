@@ -1,17 +1,20 @@
 package com.nbu.service;
 
 import com.nbu.dao.CompanyDao;
-import com.nbu.dto.CompanyDto;
-import com.nbu.dto.CompanyPaymentDto;
+import com.nbu.dto.request.CompanyDto;
+import com.nbu.dto.view.CompanyPaymentDto;
+import com.nbu.util.ValidatorUtil;
 
 import java.util.List;
 
 public class CompanyService {
     public void createCompany(CompanyDto companyDto) {
-        if(CompanyDao.existsByUic(companyDto.getUic())) {
+        ValidatorUtil.validate(companyDto);
+
+        if (CompanyDao.existsByUic(companyDto.getUic())) {
             throw new IllegalArgumentException("Company with UIC " + companyDto.getUic() + " already exists.");
         }
-        if(CompanyDao.existsByVatNumber(companyDto.getVatNumber())) {
+        if (CompanyDao.existsByVatNumber(companyDto.getVatNumber())) {
             throw new IllegalArgumentException("Company with Vat Number " + companyDto.getVatNumber() + " already exists.");
         }
 
@@ -19,11 +22,13 @@ public class CompanyService {
     }
 
     public void updateCompany(long id, CompanyDto companyDto) {
-        if(CompanyDao.existsByUicExcludingId(companyDto.getUic(), id)) {
+        ValidatorUtil.validate(companyDto);
+
+        if (CompanyDao.existsByUicExcludingId(companyDto.getUic(), id)) {
             throw new IllegalArgumentException("Company with UIC " + companyDto.getUic() + " already exists.");
         }
 
-        if(CompanyDao.existsByVatNumberExcludingId(companyDto.getVatNumber(), id)) {
+        if (CompanyDao.existsByVatNumberExcludingId(companyDto.getVatNumber(), id)) {
             throw new IllegalArgumentException("Company with VatNumber " + companyDto.getVatNumber() + " already exists.");
         }
 

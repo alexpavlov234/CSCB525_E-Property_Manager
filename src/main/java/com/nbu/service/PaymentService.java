@@ -1,9 +1,13 @@
 package com.nbu.service;
+
 import com.nbu.dao.PaymentDao;
 import com.nbu.dao.TaxDao;
-import com.nbu.dto.PaymentDto;
+import com.nbu.dto.request.PaymentDto;
+import com.nbu.util.ValidatorUtil;
+
 import java.math.BigDecimal;
 import java.util.List;
+
 public class PaymentService {
     public void createPayment(PaymentDto paymentDto) {
         validatePaymentData(paymentDto);
@@ -12,6 +16,7 @@ public class PaymentService {
         }
         PaymentDao.createPayment(paymentDto);
     }
+
     public void updatePayment(long id, PaymentDto paymentDto) {
         validatePaymentData(paymentDto);
         if (PaymentDao.isPaymentForThisMonthMadeExcludingId(paymentDto.getTaxId(), paymentDto.getPaymentDate(), id)) {
@@ -19,16 +24,23 @@ public class PaymentService {
         }
         PaymentDao.updatePayment(id, paymentDto);
     }
+
     public PaymentDto getPayment(long id) {
         return PaymentDao.getPayment(id);
     }
+
     public List<PaymentDto> getPayments() {
         return PaymentDao.getPayments();
     }
+
     public void deletePayment(long id) {
         PaymentDao.deletePayment(id);
     }
+
     private void validatePaymentData(PaymentDto paymentDto) {
+
+        ValidatorUtil.validate(paymentDto);
+
         if (!TaxDao.taxExists(paymentDto.getTaxId())) {
             throw new IllegalArgumentException("Tax with id " + paymentDto.getTaxId() + " does not exist.");
         }

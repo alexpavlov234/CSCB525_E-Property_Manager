@@ -1,15 +1,18 @@
 package com.nbu.service;
 
 import com.nbu.dao.EmployeeDao;
-import com.nbu.dto.EmployeeBuildingDto;
-import com.nbu.dto.EmployeeBuildingsSummaryDto;
-import com.nbu.dto.EmployeeCompanyDto;
-import com.nbu.dto.EmployeeDto;
+import com.nbu.dto.request.EmployeeDto;
+import com.nbu.dto.view.EmployeeBuildingDto;
+import com.nbu.dto.view.EmployeeBuildingsSummaryDto;
+import com.nbu.dto.view.EmployeeCompanyDto;
+import com.nbu.util.ValidatorUtil;
 
 import java.util.List;
 
 public class EmployeeService {
     public void createEmployee(EmployeeDto employeeDto) {
+        ValidatorUtil.validate(employeeDto);
+
         if (EmployeeDao.existsByUCN(employeeDto.getUcn())) {
             throw new IllegalArgumentException("Employee with UCN " + employeeDto.getUcn() + " already exists.");
         }
@@ -39,14 +42,17 @@ public class EmployeeService {
     }
 
     public List<EmployeeCompanyDto> getEmployeeCompanies() {
-       return EmployeeDao.getEmployeeCompanies();
+        return EmployeeDao.getEmployeeCompanies();
     }
 
-    public EmployeeCompanyDto getEmployeeCompany(long employeeId){
+    public EmployeeCompanyDto getEmployeeCompany(long employeeId) {
         return EmployeeDao.getEmployeeCompany(employeeId);
     }
 
     public void updateEmployee(long id, EmployeeDto employeeDto) {
+
+        ValidatorUtil.validate(employeeDto);
+
         if (EmployeeDao.existsByUCNExcludingId(employeeDto.getUcn(), id)) {
             throw new IllegalArgumentException("Employee with UCN " + employeeDto.getUcn() + " already exists.");
         }
