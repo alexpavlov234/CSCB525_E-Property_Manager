@@ -11,26 +11,21 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
-@Setter
 @ToString
 public class PaymentTaxDto implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private final static long serialVersionUID = 1L;
 
-    private long id;
-    private long taxId;
-    private long taxApartmentId;
-    private long taxBuildingId;
+    private final long id;
+    private final long taxId;
+    private final long taxApartmentId;
+    private final long taxBuildingId;
 
-    @DecimalMin(value = "0.0", inclusive = false, message = "The amount must be greater than zero!")
-    private BigDecimal amount;
+    private final BigDecimal amount;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @NotNull(message = "Payment date cannot be null.")
-    @PastOrPresent(message = "Payment date cannot be in the future.")
-    private LocalDate paymentDate;
+    private final LocalDate paymentDate;
 
-    private long companyId;
-    private long employeeId;
+    private final long companyId;
+    private final long employeeId;
 }
