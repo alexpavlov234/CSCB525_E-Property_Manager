@@ -1,4 +1,4 @@
-package com.nbu.dto;
+package com.nbu.dto.view;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,14 +7,9 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @ToString
-public class ApartmentResidentDto {
+public class EmployeeCompanyDto {
     private final long id;
 
-    private final int number;
-
-    private final int floor;
-
-    private final long residentId;
     private final String firstName;
 
 
@@ -23,5 +18,10 @@ public class ApartmentResidentDto {
     private final String lastName;
 
     private final String ucn;
-    private final boolean useElevator;
+
+    private final long companyId;
+
+    private final String companyName;
+
+    private final String companyUic;
 }

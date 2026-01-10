@@ -1,4 +1,4 @@
-package com.nbu.dto;
+package com.nbu.dto.view;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

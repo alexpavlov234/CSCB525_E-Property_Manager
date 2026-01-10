@@ -1,7 +1,6 @@
-package com.nbu.dto;
+package com.nbu.dto.request;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 

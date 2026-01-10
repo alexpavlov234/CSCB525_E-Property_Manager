@@ -1,4 +1,4 @@
-package com.nbu.dto;
+package com.nbu.dto.request;
 
 import jakarta.validation.constraints.DecimalMin;
 import lombok.*;

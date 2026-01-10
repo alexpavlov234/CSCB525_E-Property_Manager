@@ -1,4 +1,4 @@
-package com.nbu.dto;
+package com.nbu.dto.request;
 
 import com.nbu.validator.ValidUCN;
 import jakarta.validation.constraints.NotBlank;
