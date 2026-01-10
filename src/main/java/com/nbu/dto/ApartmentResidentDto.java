@@ -16,6 +16,7 @@ public class ApartmentResidentDto {
 
     @Min(value = 1, message = "Apartment number must be positive!")
     private int number;
+
     @Min(value = 0, message = "Floor must be zero or positive!")
     private int floor;
 

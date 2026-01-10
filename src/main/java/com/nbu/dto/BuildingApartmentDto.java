@@ -22,7 +22,6 @@ public class BuildingApartmentDto {
     @Min(value = 0, message = "Floor must be zero or positive!")
     private int floor;
 
-    @NotNull(message = "Area must not be null!")
     @Positive(message = "Area must be positive!")
     private double area;
 
