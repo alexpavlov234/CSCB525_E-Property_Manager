@@ -2,7 +2,7 @@ package com.nbu.service;
 
 import com.nbu.dao.BuildingDao;
 import com.nbu.dto.BuildingDto;
-import com.nbu.dto.BuildingResidentDto;
+import com.nbu.dto.BuildingApartmentResidentDto;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class BuildingService {
         BuildingDao.deleteBuilding(buildingId);
     }
 
-    public List<BuildingResidentDto> getBuildingResidents(long buildingId) {
+    public List<BuildingApartmentResidentDto> getBuildingResidents(long buildingId) {
         return BuildingDao.getBuildingResidents(buildingId);
     }
 

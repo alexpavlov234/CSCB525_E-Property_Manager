@@ -2,7 +2,7 @@ package com.nbu.dao;
 
 import com.nbu.configuration.SessionFactoryUtil;
 import com.nbu.dto.BuildingDto;
-import com.nbu.dto.BuildingResidentDto;
+import com.nbu.dto.BuildingApartmentResidentDto;
 import com.nbu.entity.Building;
 import com.nbu.entity.Employee;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -99,9 +99,9 @@ public class BuildingDao {
         }
     }
 
-    public static List<BuildingResidentDto> getBuildingResidents(long buildingId) {
+    public static List<BuildingApartmentResidentDto> getBuildingResidents(long buildingId) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            return session.createQuery("SELECT new com.nbu.dto.BuildingResidentDto(b.id, b.address, a.id, a.number, a.floor, r.id, r.firstName, r.middleName, r.lastName, r.birthDate, YEAR(CURRENT_DATE) - YEAR(r.birthDate), r.useElevator) FROM Building b JOIN b.apartments a JOIN a.residents r WHERE b.id = :buildingId", BuildingResidentDto.class).setParameter("buildingId", buildingId).getResultList();
+            return session.createQuery("SELECT new com.nbu.dto.BuildingResidentDto(b.id, b.address, a.id, a.number, a.floor, r.id, r.firstName, r.middleName, r.lastName, r.birthDate, YEAR(CURRENT_DATE) - YEAR(r.birthDate), r.useElevator) FROM Building b JOIN b.apartments a JOIN a.residents r WHERE b.id = :buildingId", BuildingApartmentResidentDto.class).setParameter("buildingId", buildingId).getResultList();
         }
     }
 

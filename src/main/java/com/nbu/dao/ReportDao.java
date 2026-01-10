@@ -55,29 +55,29 @@ public class ReportDao {
         }
     }
 
-    public static List<BuildingResidentDto> getResidentsSortedByName(long buildingId, boolean ascending) {
+    public static List<BuildingApartmentResidentDto> getResidentsSortedByName(long buildingId, boolean ascending) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             String orderDir = ascending ? "ASC" : "DESC";
-            Query<BuildingResidentDto> query = session.createQuery(
+            Query<BuildingApartmentResidentDto> query = session.createQuery(
                     "SELECT new com.nbu.dto.BuildingResidentDto(b.id, b.address, a.id, a.number, a.floor, r.id, r.firstName, r.middleName, r.lastName, r.birthDate, YEAR(CURRENT_DATE) - YEAR(r.birthDate), r.useElevator) " +
                             "FROM Building b JOIN b.apartments a JOIN a.residents r " +
                             "WHERE b.id = :buildingId " +
                             "ORDER BY r.firstName " + orderDir + ", r.middleName " + orderDir + ", r.lastName " + orderDir,
-                    BuildingResidentDto.class)
+                    BuildingApartmentResidentDto.class)
                     .setParameter("buildingId", buildingId);
             return query.getResultList();
         }
     }
 
-    public static List<BuildingResidentDto> getResidentsSortedByAge(long buildingId, boolean ascending) {
+    public static List<BuildingApartmentResidentDto> getResidentsSortedByAge(long buildingId, boolean ascending) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             String orderDir = ascending ? "DESC" : "ASC";
-            Query<BuildingResidentDto> query = session.createQuery(
+            Query<BuildingApartmentResidentDto> query = session.createQuery(
                     "SELECT new com.nbu.dto.BuildingResidentDto(b.id, b.address, a.id, a.number, a.floor, r.id, r.firstName, r.middleName, r.lastName, r.birthDate, YEAR(CURRENT_DATE) - YEAR(r.birthDate), r.useElevator) " +
                             "FROM Building b JOIN b.apartments a JOIN a.residents r " +
                             "WHERE b.id = :buildingId " +
                             "ORDER BY r.birthDate " + orderDir,
-                    BuildingResidentDto.class)
+                    BuildingApartmentResidentDto.class)
                     .setParameter("buildingId", buildingId);
             return query.getResultList();
         }
@@ -141,14 +141,14 @@ public class ReportDao {
         }
     }
 
-    public static List<BuildingResidentDto> getBuildingResidentsDetail(long buildingId) {
+    public static List<BuildingApartmentResidentDto> getBuildingResidentsDetail(long buildingId) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            Query<BuildingResidentDto> query = session.createQuery(
+            Query<BuildingApartmentResidentDto> query = session.createQuery(
                     "SELECT new com.nbu.dto.BuildingResidentDto(b.id, b.address, a.id, a.number, a.floor, r.id, r.firstName, r.middleName, r.lastName, r.birthDate, YEAR(CURRENT_DATE) - YEAR(r.birthDate), r.useElevator) " +
                             "FROM Building b JOIN b.apartments a JOIN a.residents r " +
                             "WHERE b.id = :buildingId " +
                             "ORDER BY a.floor, a.number, r.lastName, r.firstName",
-                    BuildingResidentDto.class)
+                    BuildingApartmentResidentDto.class)
                     .setParameter("buildingId", buildingId);
             return query.getResultList();
         }

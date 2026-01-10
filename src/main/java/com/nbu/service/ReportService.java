@@ -21,12 +21,12 @@ public class ReportService {
         return ReportDao.getEmployeesSortedByBuildingCount(companyId, ascending);
     }
 
-    public List<BuildingResidentDto> getResidentsByName(long buildingId, boolean ascending) {
+    public List<BuildingApartmentResidentDto> getResidentsByName(long buildingId, boolean ascending) {
         return ReportDao.getResidentsSortedByName(buildingId, ascending);
     }
 
 
-    public List<BuildingResidentDto> getResidentsByAge(long buildingId, boolean ascending) {
+    public List<BuildingApartmentResidentDto> getResidentsByAge(long buildingId, boolean ascending) {
         return ReportDao.getResidentsSortedByAge(buildingId, ascending);
     }
 
@@ -51,7 +51,7 @@ public class ReportService {
         return ReportDao.getBuildingResidentsCount(buildingId);
     }
 
-    public List<BuildingResidentDto> getBuildingResidentsDetail(long buildingId) {
+    public List<BuildingApartmentResidentDto> getBuildingResidentsDetail(long buildingId) {
         return ReportDao.getBuildingResidentsDetail(buildingId);
     }
 
