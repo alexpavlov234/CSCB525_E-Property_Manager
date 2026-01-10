@@ -1,20 +1,20 @@
 package com.nbu.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
-@Setter
 @ToString
 public class EmployeeBuildingDto {
-    private long employeeId;
-    private String firstName;
-    private String middleName;
-    private String lastName;
-    private String ucn;
+    private final long employeeId;
+    private final String firstName;
+    private final String middleName;
+    private final String lastName;
+    private final String ucn;
 
-    private long buildingId;
-    private String buildingAddress;
-    private int numberOfFloors;
+    private final long buildingId;
+    private final String buildingAddress;
+    private final int numberOfFloors;
 }

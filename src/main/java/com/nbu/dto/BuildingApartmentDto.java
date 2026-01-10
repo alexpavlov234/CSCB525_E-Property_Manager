@@ -1,38 +1,29 @@
 package com.nbu.dto;
 
-import jakarta.validation.constraints.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
-@Setter
 @ToString
 public class BuildingApartmentDto {
-    private long buildingId;
+    private final long buildingId;
 
-    @NotBlank(message = "Address cannot be blank!")
-    private String buildingAddress;
+    private final String buildingAddress;
 
-    private long apartmentId;
+    private final long apartmentId;
 
-    @Min(value = 1, message = "Apartment number must be positive!")
-    private int apartmentNumber;
+    private final int apartmentNumber;
 
-    @Min(value = 0, message = "Floor must be zero or positive!")
-    private int floor;
+    private final int floor;
 
-    @Positive(message = "Area must be positive!")
-    private double area;
+    private final double area;
 
-    private long ownerId;
+    private final long ownerId;
 
-    @NotBlank(message = "First name cannot be blank!")
-    @Pattern(regexp = "^([A-Z]).*", message = "First name has to start with capital letter!")
 
-    private String ownerFirstName;
-    @NotBlank(message = "Last name cannot be blank!")
-    @Pattern(regexp = "^([A-Z]).*", message = "Last name has to start with capital letter!")
-    private String ownerLastName;
+    private final String ownerFirstName;
+    private final String ownerLastName;
 }
 

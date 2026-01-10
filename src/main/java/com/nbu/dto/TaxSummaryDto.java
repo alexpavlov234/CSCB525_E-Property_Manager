@@ -1,18 +1,17 @@
 package com.nbu.dto;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 
-@NoArgsConstructor
 @Getter
-@Setter
 @ToString
 public class TaxSummaryDto {
-    private long entityId;
-    private String entityName;
-    private BigDecimal totalTaxAmount;
-    private long taxCount;
+    private final long entityId;
+    private final String entityName;
+    private final BigDecimal totalTaxAmount;
+    private final long taxCount;
 
     public TaxSummaryDto(long entityId, String entityName, Integer totalTaxAmount, Long taxCount) {
         this.entityId = entityId;
