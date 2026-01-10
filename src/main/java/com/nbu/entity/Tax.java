@@ -6,6 +6,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -22,8 +23,9 @@ public class Tax extends BaseEntity {
     @DecimalMin(value = "0.0", inclusive = false, message = "The amount must be greater than zero!")
     private BigDecimal amount;
 
-    @NotBlank(message = "The type must not be blank!")
-    private String type;
+    @NotNull(message = "Type must not be null!")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private TaxType type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Apartment apartment;

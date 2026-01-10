@@ -4,6 +4,7 @@ import com.nbu.configuration.SessionFactoryUtil;
 import com.nbu.dto.TaxDto;
 import com.nbu.entity.Apartment;
 import com.nbu.entity.Tax;
+import com.nbu.entity.TaxType;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
@@ -20,8 +21,11 @@ public class TaxDao {
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
             Transaction transaction = session.beginTransaction();
             Apartment apartment = session.find(Apartment.class, taxDto.getApartmentId());
+
+            TaxType type = session.find(TaxType.class, taxDto.getTaxTypeId());
+
             Tax tax = new Tax();
-            tax.setType(taxDto.getType());
+            tax.setType(type);
             tax.setAmount(taxDto.getAmount());
             tax.setApartment(apartment);
             session.persist(tax);
@@ -31,13 +35,9 @@ public class TaxDao {
 
     public static TaxDto getTax(long id){
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
-            Tax tax = session.find(Tax.class, id);
-            TaxDto taxDto = new TaxDto();
-            taxDto.setId(tax.getId());
-            taxDto.setType(tax.getType());
-            taxDto.setAmount(tax.getAmount());
-            taxDto.setApartmentId(tax.getApartment().getId());
-            return taxDto;
+           return session.createQuery("SELECT new com.nbu.dto.TaxDto(t.id, t.amount, t.type.id, t.apartment.id) FROM Tax t WHERE t.id = :id", TaxDto.class)
+                    .setParameter("id", id)
+                    .getSingleResult();
         }
     }
 
@@ -52,7 +52,7 @@ public class TaxDao {
                             TaxDto.class,
                     root.get("id"),
                     root.get("amount"),
-                    root.get("type"),
+                    root.get("type").get("id"),
                     root.get("apartment").get("id")
                     )
             );
@@ -67,8 +67,9 @@ public class TaxDao {
         try(Session session = SessionFactoryUtil.getSessionFactory().openSession()){
             Transaction transaction = session.beginTransaction();
             Tax tax = session.find(Tax.class, taxDto.getId());
+            TaxType taxType = session.find(TaxType.class, taxDto.getTaxTypeId());
             Apartment apartment = session.find(Apartment.class, taxDto.getApartmentId());
-            tax.setType(taxDto.getType());
+            tax.setType(taxType);
             tax.setAmount(taxDto.getAmount());
             tax.setApartment(apartment);
             session.persist(tax);

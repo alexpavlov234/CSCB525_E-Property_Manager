@@ -14,7 +14,7 @@ public class TaxDto {
 
     private BigDecimal amount;
 
-    private String type;
+    private long taxTypeId;
 
     private long apartmentId;
 
