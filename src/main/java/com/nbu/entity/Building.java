@@ -20,19 +20,15 @@ public class Building extends BaseEntity {
     private String address;
 
     @Min(value = 1, message = "Number of floors must be at least 1!")
-    @NotNull(message = "Number of floors cannot be null!")
     private int numberOfFloors;
 
     @Min(value = 1, message = "Number of apartments must be at least 1!")
-    @NotNull(message = "Number of apartments cannot be null!")
     private int numberOfApartments;
 
     @DecimalMin(value = "0.0", inclusive = false, message = "Built-up area must be greater than 0!")
-    @NotNull(message = "Built-up area cannot be null!")
     private double builtUpArea;
 
     @DecimalMin(value = "0.0", inclusive = true, message = "Common areas must be at least 0!")
-    @NotNull(message = "Common areas cannot be null!")
     private double commonAreas;
 
     @ManyToOne(fetch = FetchType.LAZY)
